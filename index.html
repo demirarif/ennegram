@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Enneagram Kişilik Testi (140 Soru)</title>
+    <style>
+        /* Spotify Dark Mode Teması */
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: #121212;
+            color: #ffffff;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            width: 100%;
+            max-width: 800px;
+            background-color: #1e1e1e;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            border: 1px solid #2a2a2a;
+        }
+        /* Giriş Ekranı Stilleri */
+        #intro-container {
+            padding: 40px;
+            text-align: center;
+        }
+        #intro-container h1 {
+            color: #1DB954;
+            font-size: 2.5rem;
+        }
+        #intro-container p.intro-text {
+            font-size: 1.1rem;
+            line-height: 1.7;
+            color: #b3b3b3;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+        
+        /* GİRİŞ BUTONU VE INPUT GÜNCELLENDİ */
+        #name-input {
+            max-width: 400px; /* Yeni */
+            width: 100%; /* Yeni */
+            display: block; /* Yeni */
+            margin-left: auto; /* Yeni */
+            margin-right: auto; /* Yeni */
+            box-sizing: border-box; /* Yeni */
+            padding: 15px;
+            font-size: 1rem;
+            background-color: #2a2a2a;
+            border: 2px solid #535353;
+            border-radius: 8px;
+            color: #ffffff;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+        #name-input::placeholder {
+            color: #777;
+        }
+        #name-input:focus {
+            outline: none;
+            border-color: #1DB954;
+        }
+        #start-button {
+            max-width: 400px; /* Yeni */
+            width: 100%; /* Yeni */
+            display: block; /* Yeni */
+            margin-left: auto; /* Yeni */
+            margin-right: auto; /* Yeni */
+            box-sizing: border-box; /* Yeni */
+            padding: 18px; /* Değişti (20'den) */
+            font-size: 1.1rem; /* Değişti (1.2'den) */
+            font-weight: 700;
+            background-color: #1DB954;
+            color: #ffffff;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            letter-spacing: 0.5px;
+        }
+        #start-button:hover {
+            background-color: #1ed760;
+            transform: scale(1.03);
+        }
+        /* GÜNCELLEME SONU */
+
+        /* Test Ekranı (Başlangıçta Gizli) */
+        #test-container {
+            display: none;
+            padding: 30px 40px;
+        }
+        #results-container {
+            display: none;
+            padding: 30px 40px;
+        }
+        h1, h2 {
+            text-align: center;
+            color: #ffffff;
+        }
+        h1 { font-size: 2rem; margin-bottom: 10px; }
+        h2.eliminated { color: #e74c3c; }
+        #section-title {
+            font-size: 1.2rem; font-weight: 600; color: #1DB954;
+            text-align: center; margin-bottom: 25px;
+        }
+        .button-grid { display: grid; grid-template-columns: 1fr; gap: 15px; }
+        .choice-button {
+            width: 100%; padding: 20px; font-size: 1rem; font-weight: 500;
+            background-color: #2a2a2a; border: 2px solid #535353; color: #ffffff;
+            border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
+            line-height: 1.5; text-align: left;
+        }
+        .choice-button:hover { background-color: #1DB954; color: #ffffff; border-color: #1DB954; }
+        .choice-button span { font-weight: 700; color: #1DB954; margin-right: 8px; }
+        .choice-button:hover span { color: #ffffff; }
+        #navigation-container {
+            display: flex; justify-content: space-between; align-items: center;
+            margin-top: 30px;
+        }
+        #btn-back {
+            padding: 10px 20px; background-color: #535353; color: #ffffff;
+            border: none; border-radius: 5px; cursor: pointer;
+            font-size: 0.9rem; font-weight: 600;
+        }
+        #btn-back:hover { background-color: #777; }
+        #btn-back:disabled { background-color: #333; opacity: 0.5; cursor: not-allowed; }
+        #progress-container {
+            flex-grow: 1; background-color: #535353; border-radius: 5px;
+            height: 10px; margin-left: 20px;
+        }
+        #progress-bar {
+            width: 0%; height: 10px; background-color: #1DB954;
+            border-radius: 5px; transition: width 0.3s ease;
+        }
+        #progress-text {
+            text-align: right; font-size: 0.9rem; color: #b3b3b3; margin-top: 8px;
+        }
+        .results-table {
+            width: 100%; border-collapse: collapse; margin-bottom: 30px;
+        }
+        .results-table th, .results-table td {
+            border: 1px solid #444; padding: 12px; text-align: left; color: #f1f1f1;
+        }
+        .results-table th { background-color: #2a2a2a; font-weight: 600; }
+        .results-table tr:nth-child(even) { background-color: #242424; }
+        .results-table td:nth-child(3) {
+            font-weight: 700; text-align: center; color: #1DB954;
+        }
+        .result-highlight {
+            background-color: #282828; border: 1px solid #1DB954;
+            padding: 20px; border-radius: 8px; margin-bottom: 20px;
+        }
+        .result-highlight h3 {
+            margin-top: 0; color: #1DB954; font-size: 1.4rem;
+            border-bottom: 1px solid #444; padding-bottom: 10px;
+        }
+        .result-highlight p { font-size: 1rem; line-height: 1.7; color: #f1f1f1; }
+        .result-highlight strong { color: #1DB954; font-weight: 600; }
+        .result-highlight ul { padding-left: 20px; }
+        .result-highlight li { margin-bottom: 5px; line-height: 1.6; }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+
+        <div id="intro-container">
+            <h1>Enneagram Kişilik Testi</h1>
+            <p class="intro-text">
+                Enneagram, kişilikleri 9 farklı tip üzerinden analiz eden bir sistemdir. Bu test, bir etiketlemeden ziyade, temel korkularınızı, motivasyonlarınızı ve dünyayı nasıl gördüğünüzü anlamanız için bir farkındalık aracıdır.
+                <br><br>
+                140 soru boyunca, size en yakın gelen ifadeyi dürüstçe seçmeniz istenecektir.
+            </p>
+            <input type="text" id="name-input" placeholder="İsminiz (Opsiyonel)">
+            <br>
+            <button id="start-button">TESTE BAŞLA</button>
+        </div>
+
+        <div id="test-container">
+            <h1>Enneagram Testi</h1>
+            <h2 id="section-title">Bölüm Başlığı</h2>
+            
+            <div class="button-grid">
+                <button class="choice-button" id="btn-a" onclick="handleAnswer('a')">Seçenek A</button>
+                <button class="choice-button" id="btn-b" onclick="handleAnswer('b')">Seçenek B</button>
+            </div>
+
+            <div id="navigation-container">
+                <button id="btn-back" onclick="handleBack()">Geri</button>
+                <div id="progress-container">
+                    <div id="progress-bar"></div>
+                </div>
+            </div>
+            <div id="progress-text" id="progress-text">Soru 1 / 140</div>
+        </div>
+
+        <div id="results-container">
+            <div class="results-header">
+                <h1>Enneagram Sonucun</h1>
+                <p>Bu analiz, verdiğiniz cevaplara dayanarak eğilimlerinizi göstermektedir.</p>
+            </div>
+
+            <div class="result-highlight" id="ana-tip-container">
+                <h3 id="ana-tip-title">Ana Tipin: Yükleniyor...</h3>
+                <p id="ana-tip-desc"></p>
+                <p id="ana-tip-celebs-title"><strong>Bu Tipe Sahip Olduğu Düşünülen Ünlüler:</strong></p>
+                <ul id="ana-tip-celebs-list"></ul>
+            </div>
+
+            <div class="result-highlight" id="tritype-container">
+                <h3>Detaylı Portre: Üçlü Tip (Tritype) Analizi</h3>
+                <p id="tritype-desc"></p>
+                <p id="center-desc"></p>
+            </div>
+            
+            <div class="result-highlight" id="kanat-container">
+                <h3 id="kanat-title">Kanadın: Yükleniyor...</h3>
+                <p id="kanat-desc"></p>
+            </div>
+
+            <div class="result-highlight" id="stres-rahat-container">
+                <h3>Stres & Rahatlık Yönleri</h3>
+                <p id="stres-desc"></p>
+                <p id="rahat-desc"></p>
+            </div>
+
+            <h3>Puan Dağılımı</h3>
+            <table class="results-table" id="results-table-body">
+                <thead>
+                    <tr>
+                        <th>Enneagram Tipi</th>
+                        <th>Tanım</th>
+                        <th>Yüzde</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    </tbody>
+            </table>
+
+        </div>
+
+    </div>
+
+    <script>
+        // ========================================================================
+        // GEMINI TARAFINDAN KALİBRE EDİLMİŞ 140 SORULUK TAM PUANLAMA ANAHTARI
+        // ========================================================================
+        const questions = [
+            {
+                section: "Bölüm 1 — Temel Eğilimler",
+                items: [
+                    { a: "İçimde sürekli daha iyi olma ve standartları yükseltme isteği vardır.", b: "Hayatı ve olayları kendi doğal akışına bırakmayı tercih ederim.", key_a: "T1", key_b: "T9" },
+                    { a: "Başkalarının bana ihtiyaç duyması ve onlara destek olmak beni motive eder.", b: "Kendi başıma yetebilmek ve kimseden beklenti olmadan özgür hissetmek isterim.", key_a: "T2", key_b: "T5" },
+                    { a: "Hedeflerime ulaştığımda ve başarılı olduğumda değerli hissederim.", b: "Duygusal olarak samimi ve özgün olduğumda değerli hissederim.", key_a: "T3", key_b: "T4" },
+                    { a: "Kendimi farklı, özgün ve 'özel' hissetmek isterim.", b: "Uyumlu, huzurlu ve 'sıradan' bir yaşamın parçası olmayı tercih ederim.", key_a: "T4", key_b: "T9" },
+                    { a: "İnsanları ve durumları anlamak için önce mesafeli durup gözlemlerim.", b: "İnsanları ve durumları anlamak için onlarla doğrudan etkileşime girerim.", key_a: "T5", key_b: "T2" },
+                    { a: "Hayatta belirsizlikleri azaltmak için bir planım ve stratejim olmalı.", b: "Yeni olasılıklara açık olmak için planların kısıtlayıcı olmamasını tercih ederim.", key_a: "T6", key_b: "T7" },
+                    { a: "Zihnim sürekli yeni fikirler, projeler ve olasılıklarla dolar.", b: "Zihnim ilgimi çeken bir konuyu derinlemesine incelemeye odaklanır.", key_a: "T7", key_b: "T5" },
+                    { a: "Zor durumlarda güçlü ve kararlı görünmek benim için önemlidir.", b: "Duygusal olarak dürüst ve savunmasız olabilmek benim için güçtür.", key_a: "T8", key_b: "T4" },
+                    { a: "Ortamdaki huzuru korumak için çatışmadan kaçınırım.", b: "Gelişim ve netlik için çatışmanın gerekli olduğuna inanırım.", key_a: "T9", key_b: "T8" },
+                    { a: "Hata yapmaktan veya 'yanlış' davranmaktan şiddetle çekinirim.", b: "Hataları, öğrenme sürecinin doğal ve yol gösterici bir parçası olarak görürüm.", key_a: "T1", key_b: "T7" },
+                    { a: "İnsanların bana güvenmesi ve sadakatimi bilmesi benim için kritiktir.", b: "Başkalarının onayına ihtiyaç duymadan kendi yolumu çizmeyi seçerim.", key_a: "T6", key_b: "T8" },
+                    { a: "Duygularımın yoğunluğunu hisseder ve bu derinliğe değer veririm.", b: "Duygularımı mantık ve prensiplerimle kontrol altında tutmaya çalışırım.", key_a: "T4", key_b: "T1" },
+                    { a: "Yaptığım her şeyin net bir amacı ve 'doğru' bir yolu olmalı.", b: "Her şeyin derin bir anlamı olmak zorunda değil, bazen sadece deneyim vardır.", key_a: "T1", key_b: "T9" },
+                    { a: "Üretken ve 'işe yarar' hissetmediğimde kendimi huzursuz hissederim.", b: "Bir şey 'yapmasam' veya 'başarmasam' bile değerli olduğumu bilirim.", key_a: "T3", key_b: "T9" },
+                    { a: "Başkalarına yardım etmeyi ve ihtiyaçlarını karşılamayı görevim gibi hissederim.", b: "Enerjimi korumak için önce kendi sınırlarımı korumam gerektiğini bilirim.", key_a: "T2", key_b: "T5" },
+                    { a: "Bir işe başlarsam, onu kusursuz ve en iyi standartta yapmalıyım.", b: "Bir işi 'yeterince iyi' yapmak da kabul edilebilirdir, mükemmel olması şart değil.", key_a: "T1", key_b: "T9" },
+                    { a: "Kararlarımı verilere ve mantıksal analizlere dayandırırım.", b: "Kararlarımda sezgilerimin ve içimden gelen sesin önemli bir payı vardır.", key_a: "T5", key_b: "T4" },
+                    { a: "Yeni deneyimler ve riskler almak bana heyecan ve enerji verir.", b: "Bildiğim ve güvende olduğum alanlarda kalmak bana huzur verir.", key_a: "T7", key_b: "T6" },
+                    { a: "Genellikle kontrolün bende olmasını ve durumu yönetmeyi isterim.", b: "Bazen kontrolü bırakmanın ve akışa güvenmenin daha huzurlu olduğunu düşünürüm.", key_a: "T8", key_b: "T9" },
+                    { a: "Başkalarının duygusal ihtiyaçlarına karşı çok duyarlıyımdır.", b: "Duygusal durumlara karşı daha mesafeli ve objektif kalırım.", key_a: "T2", key_b: "T5" },
+                    { a: "Gelecekteki yeni olasılıklar ve planlar beni mevcut durumdan daha çok büyüler.", b: "Mevcut anın veya konunun derinliğini keşfetmek beni daha çok tatmin eder.", key_a: "T7", key_b: "T4" },
+                    { a: "Yapılandırılmış ve düzenli bir ortamda kendimi daha üretken hissederim.", b: "Esnek ve kuralları az olan bir ortamda kendimi daha yaratıcı hissederim.", key_a: "T1", key_b: "T7" },
+                    { a: "Konuların net bir 'doğrusu' ve 'yanlışı' olduğuna inanırım.", b: "Doğru ve yanlışın, bakış açısına ve duruma göre değişebileceğine inanırım.", key_a: "T1", key_b: "T9" },
+                    { a: "İnsanlarla derin duygusal bağlar kurduğumda enerji kazanarım.", b: "Kendi düşüncelerimle yalnız kaldığımda enerjimi yeniden toplarım.", key_a: "T2", key_b: "T5" },
+                    { a: "Duygularımı dürüstçe göstermenin bir zayıflık olmadığını düşünürüm.", b: "Duygularımı göstermenin beni gereksiz yere savunmasız yapacağını düşünürüm.", key_a: "T4", key_b: "T8" },
+                    { a: "Hayat, üstesinden gelinmesi gereken zorluklar ve mücadeleler bütünüdür.", b: "Hayat, keyif alınması ve keşfedilmesi gereken bir deneyimler bütünüdür.", key_a: "T8", key_b: "T7" },
+                    { a: "Başarılarım ve yetkinliğimle ciddiye alınmak isterim.", b: "Özgünlüğüm ve 'olduğum halimle' kabul edilmek isterim.", key_a: "T3", key_b: "T4" },
+                    { a: "Net hedefler koymadan motive olmakta zorlanırım.", b: "Hedef olmasa bile, akışta kalarak da üretken ve motive olabilirim.", key_a: "T3", key_b: "T9" },
+                    { a: "İnsanlara güvenmeden önce onları uzun süre gözlemler ve analiz ederim.", b: "İnsanlara genelde güvenirim; aksi kanıtlanırsa dersimi alırım.", key_a: "T6", key_b: "T2" },
+                    { a: "Ani ve plansız değişiklikler beni kaygılandırır.", b: "Ani ve plansız değişiklikler beni canlandırır ve heyecanlandırır.", key_a: "T6", key_b: "T7" }
+                ]
+            },
+            {
+                section: "Bölüm 2 — Duygusal Refleksler",
+                items: [
+                    { a: "Eleştirildiğimde, pozisyonumu veya doğrularımı savunmaya geçerim.", b: "Eleştirildiğimde, önce karşı tarafın bakış açısını anlamaya çalışırım.", key_a: "T1", key_b: "T9" },
+                    { a: "Kırgınlığımı, uyumu bozmamak için içimde tutarım.", b: "Kırgınlığımı, anlaşılmak için açıkça belli ederim.", key_a: "T9", key_b: "T4" },
+                    { a: "Bir şeyin 'yanlış' yapılmasından veya etik dışı olmasından korkarım.", b: "Bir şeyin poteni 'denememekten' veya 'kaçırmaktan' korkarım.", key_a: "T1", key_b: "T7" },
+                    { a: "Yoğun duygular hissettiğimde, onları anlamak için analiz ederim.", b: "Yoğun duygular hissettiğimde, onların akmasına ve deneyimlenmesine izin veririm.", key_a: "T5", key_b: "T4" },
+                    { a: "Bir sorun ortaya çıktığında, verimlilik adına hemen çözmek isterim.", b: "Bir sorun ortaya çıktığında, bazen en iyi çözümün 'zaman bırakmak' olduğunu düşünürüm.", key_a: "T3", key_b: "T9" },
+                    { a: "Birinden duygusal mesafe hissedersem, reddedilmemek için ben de çekilirim.", b: "Birinden duygusal mesafe hissedersem, nedenini anlamak için üzerine giderim.", key_a: "T2", key_b: "T8" },
+                    { a: "Duygusal olarak incindiğimde sakinleşmem ve affetmem zaman alır.", b: "Çabuk parlasam da, öfkem veya kırgınlığım çabuk geçer, kin tutmam.", key_a: "T4", key_b: "T7" },
+                    { a: "Başkalarının ne hissettiğini kolayca anlar ve empati yaparım.", b: "Başkalarının ne hissettiğini fark etsem de, mantıklı ve mesafeli kalmayı tercih ederim.", key_a: "T2", key_b: "T5" },
+                    { a: "Yaptığım hatalar zihnimde uzun süre döner, 'keşke' derim.", b: "Hatalardan dersimi alır ve hızla önüme bakmaya çalışırım.", key_a: "T1", key_b: "T7" },
+                    { a: "Endişelendiğimde, en kötü senaryolara karşı B, C, D planları yaparım.", b: "Endişelendiğimde, dikkatimi daha keyifli ve olumlu şeylere yönlendiririm.", key_a: "T6", key_b: "T7" },
+                    { a: "Korkularımı ve endişelerimi başkalarına pek belli etmem, güçlü dururum.", b: "Korkularımı ve endişelerimi güvendiğim insanlarla paylaşarak destek ararım.", key_a: "T8", key_b: "T6" },
+                    { a: "Sevdiğim biri benden uzaklaşırsa, 'ben ne yaptım' diye suçluluk duyarım.", b: "Sevdiğim biri benden uzaklaşırsa, onun kararıdır der, kendi alanıma çekilirim.", key_a: "T2", key_b: "T5" },
+                    { a: "Dışarıdan gelen onayı hissetmek beni motive eder.", b: "Kendi içsel standartlarıma uymak bana yeterlidir.", key_a: "T3", key_b: "T1" },
+                    { a: "Süreçlerin ve kararların benim kontrolümde olmasını tercih ederim.", b: "Akışa uymayı ve yönlendirmeyi başkalarına bırakmayı tercih ederim.", key_a: "T8", key_b: "T9" },
+                    { a: "Çatışma anında, ortamı sakinleştirmek ve uyumu korumak için arabulucu olurum.", b: "Çatışma anında, gerçeği ortaya çıkarmak ve netlik kazanmak için konunun üzerine giderim.", key_a: "T9", key_b: "T8" },
+                    { a: "Uzun süren sessizlik ve eylemsizlik beni huzursuz eder, bir 'olay' ararım.", b: "Uzun süren sessizlik ve yalnızlık bana huzur verir ve enerjimi yeniler.", key_a: "T7", key_b: "T5" },
+                    { a: "Üzüntü veya melankoli hissettiğimde, bu duyguyu dışa yansıtma eğilimindeyim.", b: "Üzüntü veya melankoli hissettiğimde, bunu kendi içimde yalnız yaşamayı tercih ederim.", key_a: "T4", key_b: "T5" },
+                    { a: "Bir ilişkide 'ben' diyememekten, kimliğimi kaybetmekten korkarım.", b: "Bir ilişkide 'biz' olamamaktan, derin bir bağ kuramamaktan korkarım.", key_a: "T4", key_b: "T2" },
+                    { a: "Kendimi sürekli daha iyiye doğru zorlarım ve yüksek hedefler koyarım.", b: "Kendi içsel huzurumu ve mevcut ritmimi korumayı daha çok önemserim.", key_a: "T1", key_b: "T9" },
+                    { a: "Baskı altında, inisiyatif alıp sorumluluğu üstlenirim.", b: "Baskı altında, durumu analiz etmek için bir adım geri çekilir ve gözlem yaparım.", key_a: "T8", key_b: "T5" },
+                    { a: "İnsanların bana 'ihtiyaç' duymasını isterim, bu beni değerli hissettirir.", b: "Kimsenin bana 'ihtiyaç' duymaması bana özgürlük ve huzur verir.", key_a: "T2", key_b: "T5" },
+                    { a: "Gerilimi yükseldiğinde, ortamı yumuşatmak için şaka yapar veya konuyu dağıtırım.", b: "Gerilim yükseldiğinde, sorunu ciddiyetle ele alıp yapısal bir çözüm ararım.", key_a: "T7", key_b: "T1" },
+                    { a: "Zorlayıcı duygulardan kaçmak için zihnimi meşgul etmeyi tercih ederim.", b: "Zorlayıcı duyguların içine girmeyi ve onları anlamlandırmayı tercih ederim.", key_a: "T7", key_b: "T4" },
+                    { a: "Birine tam güvenmeden önce, onu küçük senaryolarla 'test' ederim.", b: "Birine güvenirsem, onu test etmem, sadece dinler ve anlamaya çalışırım.", key_a: "T6", key_b: "T9" },
+                    { a: "Duygularımın yoğunluğu bazen mantığımın önüne geçer.", b: "Duygularım ne kadar yoğun olursa olsun, mantığımı önde tutmaya çalışırım.", key_a: "T4", key_b: "T1" },
+                    { a: "Bir hata yaptığımda, başkalarının gözündeki imajım için utanırım.", b: "Bir hata yaptığımda, kendi prensiplerime uymadığım için suçluluk duyarım.", key_a: "T3", key_b: "T1" },
+                    { a: "Stres altında tepkilerim genellikle dışa dönük ve agresif olabilir.", b: "Stres altında tepkilerim genellikle içe dönük ve mesafeli olabilir.", key_a: "T8", key_b: "T5" },
+                    { a: "Güçlü ve kararlı görünmek bana güven verir.", b: "Sevecen ve ulaşılabilir görünmek bana güven verir.", key_a: "T8", key_b: "T2" },
+                    { a: "Anlaşılmamak bende derin bir hayal kırıklığı ve 'eksiklik' hissi yaratır.", b: "Anlaşılmamak doğaldır, herkesin beni anlamasını beklemem.", key_a: "T4", key_b: "T9" },
+                    { a: "Dışsal olayları veya başkalarını kontrol edememekten korkarım.", b: "Kendi içsel dürtülerimi veya 'yanlış' yapma isteğimi kontrol edememekten korkarım.", key_a: "T8", key_b: "T1" }
+                ]
+            },
+            {
+                section: "Bölüm 3 — Motivasyon & Korkular",
+                items: [
+                    { a: "Temel motivasyonum dünyayı 'düzeltmek' ve 'iyileştirmektir'.", b: "Temel motivasyonum dünyayı 'anlamak' ve 'kavramaktır'.", key_a: "T1", key_b: "T5" },
+                    { a: "Sevilmek için başkalarının ihtiyaçlarına odaklanır ve fedakârlık yaparım.", b: "Sevildiğimden emin olsam bile, uyumu korumak için kendi isteklerimi ertelerim.", key_a: "T2", key_b: "T9" },
+                    { a: "En büyük korkum 'değersiz' veya 'başarısız' olmaktır.", b: "En büyük korkum 'sıradan' veya 'anlamsız' olmaktır.", key_a: "T3", key_b: "T4" },
+                    { a: "Kendimi 'özel' ve 'farklı' hissetmezsem hayat anlamsızlaşır.", b: "Başkalarıyla 'uyum' ve 'bütünlük' hissetmezsem hayat anlamsızlaşır.", key_a: "T4", key_b: "T9" },
+                    { a: "Bilinmeyen ve belirsiz durumlar beni yetersiz hissettirir ve rahatsız eder.", b: "Bilinmeyen ve belirsiz durumlar bana keşif için ilham ve heyecan verebilir.", key_a: "T5", key_b: "T7" },
+                    { a: "En çok korktuğum şey güvendiğim insanlar tarafından 'ihanete' uğramaktır.", b: "En çok korktuğum şey sevdiklerim tarafından 'istenmemek' veya 'unutulmaktır'.", key_a: "T6", key_b: "T2" },
+                    { a: "Olumsuz duygulardan ve acıdan kaçmak için dikkatimi keyifli şeylere yönlendiririm.", b: "Olumsuz duyguları ve acıyı, anlamlı oldukları için hissetmenin değerli olduğuna inanırım.", key_a: "T7", key_b: "T4" },
+                    { a: "En büyük korkum 'zayıf' görünmek veya 'kontrol edilmektir'.", b: "En büyük korkum 'sevilmeyen' veya 'itici' görünmektir.", key_a: "T8", key_b: "T2" },
+                    { a: "Benim için 'içsel huzur' ve 'barış' en değerli olandır.", b: "Benim için 'doğruluk' ve 'adalet', mevcut huzurdan daha önemlidir.", key_a: "T9", key_b: "T1" },
+                    { a: "Sürekli olarak 'kusursuz' olmanın peşindeyim.", b: "Sürekli olarak 'güvende' olmanın peşindeyim.", key_a: "T1", key_b: "T6" },
+                    { a: "Yaptığım yardımların ve fedakarlıkların 'görülmesini' ve 'takdir edilmesini' isterim.", b: "Yaptıklarımın görülmesinden çok, 'özgür' ve 'kısıtlanmamış' olmayı isterim.", key_a: "T2", key_b: "T7" },
+                    { a: "İnsanların gözünde 'başarılı' görünmek isterim.", b: "İnsanların gözünde 'tutarlı' ve 'güvenilir' görünmek isterim.", key_a: "T3", key_b: "T6" },
+                    { a: "Farklılığım ve özgünlüğümle öne çıkmak isterim.", b: "Sadakatim ve güvenilirliğimle öne çıkmak isterim.", key_a: "T4", key_b: "T6" },
+                    { a: "Bilgi ve uzmanlık bana güven verir.", b: "Kararlılık ve eylem gücü bana güven verir.", key_a: "T5", key_b: "T8" },
+                    { a: "Her şeyin bir düzen içinde ve 'olması gerektiği gibi' kontrolümde olmasını isterim.", b: "Her şeyin 'tam kontrolümde' olması şart değil, esneklik de önemlidir.", key_a: "T1", key_b: "T9" },
+                    { a: "Güvenmek zordur, o yüzden hep bir 'B planım' vardır.", b: "Hayata güvenirim, genelde 'B planına' ihtiyaç duymam, anı yaşarım.", key_a: "T6", key_b: "T7" },
+                    { a: "Hayattaki temel amacım 'keyif' ve 'yeni deneyimler'dir.", b: "Hayattaki temel amacım 'anlam' ve 'duygusal derinlik'tir.", key_a: "T7", key_b: "T4" },
+                    { a: "Ne pahasına olursa olsun 'zayıf' veya 'savunmasız' görünmemeliyim.", b: "Ne pahasına olursa olsun 'duygusuz' veya 'kalpsiz' görünmemeliyim.", key_a: "T8", key_b: "T2" },
+                    { a: "Huzurumu korumak için çatışmadan kaçınmak en iyi yoldur.", b: "Gerçeği savunmak için çatışmaya girmek, huzuru bozmaya değer.", key_a: "T9", key_b: "T8" },
+                    { a: "Kendi 'doğru' standartlarıma uymayınca içsel huzurum bozulur.", b: "Kendi 'özgün' kimliğime ihanet edince içsel huzurum bozulur.", key_a: "T1", key_b: "T4" },
+                    { a: "Sevilmezsem ve ihtiyaç duyulmazsam kendimi 'değersiz' hissederim.", b: "Anlaşılmazsam ve 'sıradan' görülürsem kendimi 'değersiz' hissederim.", key_a: "T2", key_b: "T4" },
+                    { a: "Başarısızlık, imajımın zedelenmesi demektir ve bundan utanırım.", b: "Başarısızlık, deneyimin bir parçasıdır ve beni kısıtlamaz.", key_a: "T3", key_b: "T7" },
+                    { a: "Hayal gücüm ve iç dünyam, dış dünyadaki gerçeklerden daha zengindir.", b: "Dış dünyadaki somut gerçekler ve prensipler, hayal gücünden daha önemlidir.", key_a: "T4", key_b: "T1" },
+                    { a: "Yalnız kalmak ve düşünmek bana huzur ve netlik verir.", b: "Yalnız kalmak bana 'dışarıda kalmışlık' hissi verir ve ürkütür.", key_a: "T5", key_b: "T2" },
+                    { a: "Korkularımı ve endişelerimi detaylıca analiz eder, onlara hazırlıklı olurum.", b: "Korkularımın ve endişelerimin üzerine gider, onlarla yüzleşirim.", key_a: "T6", key_b: "T8" },
+                    { a: "Hayatın amacı olabildiğince keyif almak ve acıdan kaçmaktır.", b: "Hayatın amacı bir anlam bulmak ve doğru olanı yapmaktır.", key_a: "T7", key_b: "T1" },
+                    { a: "Çevremdeki düzensizlikten ve hatalardan kendimi sorumlu hissederim.", b: "Çevremdeki her şeyden sorumlu değilim, herkes kendi sorumluluğunu almalı.", key_a: "T1", key_b: "T9" },
+                    { a: "Ortamlarda genellikle 'yönlendiren' ve 'karar veren' rolünü alırım.", b: "Ortamlarda genellikle 'destekleyen' ve 'empati kuran' rolünü alırım.", key_a: "T8", key_b: "T2" },
+                    { a: "Sükunet ve içsel denge, gerçeği savunmaktan daha önemlidir.", b: "Gerçeği savunmak ve adil olmak, sükuneti bozmaya değer.", key_a: "T9", key_b: "T1" },
+                    { a: "Yapılandırılmış ve düzenli bir hayat bana huzur verir.", b: "Spontane ve akışta olan bir hayat bana huzur verir.", key_a: "T1", key_b: "T7" }
+                ]
+            },
+            {
+                section: "Bölüm 4 — Sosyal / İçgüdüsel / Durumsal",
+                items: [
+                    { a: "Güvendiğim bir grubun veya topluluğun içinde kendimi güvende hissederim.", b: "Kalabalıktan uzakta, kendi özel alanımda kendimi güvende hissederim.", key_a: "T6", key_b: "T5" },
+                    { a: "Sosyal ortamlar ve yeni etkileşimler beni canlandırır ve besler.", b: "Yalnız zaman geçirmek ve iç dünyama dönmek beni besler.", key_a: "T7", key_b: "T5" },
+                    { a: "Toplumdaki statüm ve başardığım imaj benim için önemlidir.", b: "İnsanlarla kurduğum derin ve samimi bağlar benim için daha önemlidir.", key_a: "T3", key_b: "T2" },
+                    { a: "Önceliğim, kendimi ve sevdiklerimi maddi ve fiziksel olarak güvende tutmaktır.", b: "Önceliğim, kendimi ve sevdiklerimi duygusal olarak güvende ve anlaşılmış hissettirmektir.", key_a: "T6", key_b: "T4" },
+                    { a: "Bir ortama girdiğimde, dikkatleri üzerime çekmeyi ve öne çıkmayı severim.", b: "Bir ortama girdiğimde, arka planda kalıp gözlem yapmayı tercih ederim.", key_a: "T3", key_b: "T5" },
+                    { a: "Yeni insanlarla tanışmak ve farklı çevrelerde bulunmak bana enerji verir.", b: "Az sayıda ama derin bağ kurduğum insanlarla vakit geçirmeyi tercih ederim.", key_a: "T7", key_b: "T4" },
+                    { a: "Kendi özel alanımı ve sınırlarımı korumak konusunda çok hassasımdır.", b: "Yakınlık kurmak için sınırlarımı esnetmeyi ve alanımı paylaşmayı severim.", key_a: "T5", key_b: "T2" },
+                    { a: "Yeni ortamlara kolayca uyum sağlar ve hızlıca kaynaşırım.", b: "Yeni ortamlara alışmam ve insanlara 'ısınmam' zaman alır.", key_a: "T7", key_b: "T5" },
+                    { a: "Fiziksel güç ve kararlılık, ilişkilerde önemli bir yer tutar.", b: "Duygusal empati ve şefkat, ilişkilerde önemli bir yer tutar.", key_a: "T8", key_b: "T2" },
+                    { a: "Grup içinde genellikle kararları veren ve yönlendiren ben olurum.", b: "Grup içinde genellikle uyumu sağlayan ve akışa uyan ben olurum.", key_a: "T8", key_b: "T9" },
+                    { a: "Rekabetçi ortamlar beni motive eder ve en iyimi ortaya çıkarır.", b: "Rekabetçi ortamlar beni gerer ve içsel huzurumu bozar.", key_a: "T3", key_b: "T9" },
+                    { a: "Yaptığım işle 'tanınmak' ve 'beğenilmek' isterim.", b: "Yaptığım işle 'tanınmasam' bile 'yetkin' ve 'bilgili' olmayı tercih ederim.", key_a: "T3", key_b: "T5" },
+                    { a: "Genel olarak hayata ve insanlara iyimser yaklaşırım, güvenmek kolaydır.", b: "Hayata ve insanlara karşı temkinliyimdir, güvenmem zaman alır.", key_a: "T7", key_b: "T6" },
+                    { a: "Başarılarımla 'hayranlık' duyulması hoşuma gider.", b: "Kimliğimle 'derinlemesine anlaşılmak' hoşuma gider.", key_a: "T3", key_b: "T4" },
+                    { a: "Ortamlarda dikkat çekmeyi ve enerjiyi yükseltmeyi severim.", b: "Ortamlarda huzuru korumayı ve arka planda kalmayı tercih ederim.", key_a: "T7", key_b: "T9" },
+                    { a: "Ait olduğum topluluğa veya gruba karşı güçlü bir sadakat hissederim.", b: "Kendi bireyselliğimi ve özgünlüğümü korumak, grup aidiyetinden önce gelir.", key_a: "T6", key_b: "T4" },
+                    { a: "Enerjimi daha çok dış dünyadaki hedeflere ve başarılara odaklarrım.", b: "Enerjimi daha çok iç dünyamdaki düşüncelere ve analizlere odaklarrım.", key_a: "T3", key_b: "T5" },
+                    { a: "Güçlü sezgilerim ve duygularım bana yön verir.", b: "Net veriler ve analizlerim bana yön verir.", key_a: "T4", key_b: "T6" },
+                    { a: "Sosyal ortamlardaki hiyerarşiyi ve 'kimin güçlü olduğunu' hızla fark ederim.", b: "Sosyal ortamlardaki hiyerarşiyi pek umursamam, herkesin eşit olduğuna inanırım.", key_a: "T3", key_b: "T9" },
+                    { a: "Yaptığım iyiliklerin ve katkıların 'fark edilmesini' isterim.", b: "Katkılarım fark edilmese de 'doğru' olanı yapmış olmanın tatminini yaşarım.", key_a: "T2", key_b: "T1" },
+                    { a: "Fiziksel temas ve dokunsallık benim için rahatlatıcı ve önemlidir.", b: "Duygusal ve zihinsel yakınlığı, fiziksel temastan daha öncelikli bulurum.", key_a: "T8", key_b: "T4" },
+                    { a: "Kalabalıkta bile kendimi 'farklı' ve 'yalnız' hissedebilirim.", b: "Kalabalıkta ve sosyal ortamlarda kendimi 'canlı' ve 'ait' hissederim.", key_a: "T4", key_b: "T7" },
+                    { a: "Duygularımı yoğun ve dramatik bir şekilde yaşama eğilimindeyim.", b: "Duygularımı sakin ve kendi içimde yaşama eğilimindeyim.", key_a: "T4", key_b: "T9" },
+                    { a: "Net kurallar ve düzen bana 'güven' verir.", b: "Kuralların olmaması ve esneklik bana 'ilham' verir.", key_a: "T1", key_b: "T7" },
+                    { a: "İnsanlarla hızlı ve kolay bir şekilde duygusal bağ kurarım.", b: "Derin bir duygusal bağ kurmam için zamana ve gözleme ihtiyaç duyarım.", key_a: "T2", key_b: "T5" },
+                    { a: "Hedeflerimi ve başarılarımı başkalarıyla paylaşmayı severim.", b: "Hedeflerimi ve projelerimi genelde kendime saklarım, bitince paylaşırım.", key_a: "T3", key_b: "T5" },
+                    { a: "Zorlandığımda başkalarından destek ve yardım istemek bana iyi gelir.", b: "Zorlandığımda tek başıma mücadele etmeyi ve sorunu kendim çözmeyi tercih ederim.", key_a: "T2", key_b: "T8" },
+                    { a: "Başkalarının onayı ve takdiri hoşuma gider.", b: "Başkalarının onayı olmasa da kendi kararlarımdan eminimdir.", key_a: "T3", key_b: "T8" },
+                    { a: "Detaylı bir plana sahip olmak bana güven verir.", b: "Seçeneklerimin açık olması ve akışta kalmak bana huzur verir.", key_a: "T6", key_b: "T9" },
+                    { a: "Hayattaki anlamı 'başkalarıyla bağ kurmakta' bulurum.", b: "Hayattaki anlamı 'kendimi ve dünyayı keşfetmekte' bulurum.", key_a: "T2", key_b: "T4" }
+                ]
+            },
+            {
+                section: "Bölüm 5 — Durum Bazlı Senaryolar",
+                items: [
+                    { a: "Patronum beni haksızca eleştirdi: Pozisyonumu ve haklılığımı net bir dille savunurum.", b: "Patronum beni haksızca eleştirdi: Önce dinlerim, sonra düşüncelerimi yapısal bir şekilde sunarım.", key_a: "T8", key_b: "T1" },
+                    { a: "Ekip projede gecikti: Duruma el koyar, görevleri dağıtır ve süreci hızlandırırım.", b: "Ekip projede gecikti: Ekibin moralini yükseltir, streslerini azaltır ve uyumla bitirmeye odaklanırım.", key_a: "T3", key_b: "T9" },
+                    { a: "Önemli bir planım son anda bozuldu: Hemen B planını devreye sokar, durumu düzeltirim.", b: "Önemli bir planım son anda bozuldu: Bu yeni durumu bir fırsat olarak görür, spontane alternatifler denerim.", key_a: "T1", key_b: "T7" },
+                    { a: "Bir arkadaşım bana kırıldı: Aramızdaki bağı onarmak için hemen gönlünü almaya çalışırım.", b: "Bir arkadaşım bana kırıldı: Düşünmesi için ona alan tanır, kendi içime çekilirim.", key_a: "T2", key_b: "T5" },
+                    { a: "Önemli bir satış şansı var: Sunumu ben yapar, karizmamla ikna etmeye odaklanırım.", b: "Önemli bir satış şansı var: Arka planda kalarak sunum için en iyi verileri ve stratejiyi hazırlarım.", key_a: "T3", key_b: "T6" },
+                    { a: "Bir haksızlık gördüm: Güçlü bir şekilde duruma direkt müdahale ederim.", b: "Bir haksızlık gördüm: Doğru prosedürün işlemesi için yetkili mercilere durumu bildiririm.", key_a: "T8", key_b: "T1" },
+                    { a: "Önümde belirsiz bir proje var: Tüm belirsizlikleri netleştirmek için derinlemesine araştırma yaparım.", b: "Önümde belirsiz bir proje var: 'Deneyip görelim' der, yolda öğrenmeyi tercih ederim.", key_a: "T5", key_b: "T7" },
+                    { a: "İlişkimde bir sorun var: Sorunu net ve doğrudan konuşurum, yüzleşmekten çekinmem.", b: "İlişkimde bir sorun var: Duygularımı dolaylı yoldan (mektup, jestler) anlatmayı tercih ederim.", key_a: "T8", key_b: "T4" },
+                    { a: "Aklıma yeni bir fikir geldi: Heyecanla hemen başlatırım ve enerjisiyle hareket ederim.", b: "Aklıma yeni bir fikir geldi: Fikri olgunlaştırmak için zaman ayırır, derinlemesine çalışırım.", key_a: "T7", key_b: "T5" },
+                    { a: "Bir çatışma çıktı: Duruma hakim olur, kontrolü ele alır ve yönlendiririm.", b: "Bir çatışma çıktı: Taraflar arasında arabuluculuk yapar, ortak bir zemin bulmaya çalışırım.", key_a: "T8", key_b: "T9" },
+                    { a: "Çok az zamanım kaldı: Hemen öncelik listesi yapar ve disiplinle çalışırım.", b: "Çok az zamanım kaldı: Önce ilham gelmesini veya duygusal olarak 'hazır' hissetmeyi beklerim.", key_a: "T1", key_b: "T4" },
+                    { a: "Eleştiri aldım: İmajımı düzeltmek için performansımı hemen artırırım.", b: "Eleştiri aldım: Kimliğime bir saldırı olarak algılar, duygusal olarak savunmaya geçerim.", key_a: "T3", key_b: "T4" },
+                    { a: "Projede kaynak kıt: Kendi kaynaklarımla, tasarruflu bir şekilde tek başıma çalışırım.", b: "Projede kaynak kıt: Eksikleri tamamlamak için başkalarından destek ister ve işbirliği yaparım.", key_a: "T5", key_b: "T2" },
+                    { a: "Büyük risk, büyük ödül: Genellikle büyük riski almayı tercih ederim.", b: "Büyük risk, büyük ödül: Genellikle güvenli ve kademeli adımları tercih ederim.", key_a: "T8", key_b: "T6" },
+                    { a: "Yön belirsiz ve otorite zayıf: Otoriteyi sorgular ve en kötü senaryoya hazırlanırım.", b: "Yön belirsiz ve otorite zayıf: Durumu kabullenir, akışa uyar ve uyumu korurum.", key_a: "T6", key_b: "T9" },
+                    { a: "Kendi hedefimle takım hedefi çakıştı: Kendi hedefimi ve başarımı öncelerim.", b: "Kendi hedefimle takım hedefi çakıştı: Takımın ihtiyacını ve başarısını öncelerim.", key_a: "T3", key_b: "T2" },
+                    { a: "İlhamım yok: Keyifli ve eğlenceli aktivitelerle enerjimi yenilerim.", b: "İlhamım yok: Disiplinli bir şekilde rutine girer ve ilham gelmese de üretmeye çalışırım.", key_a: "T7", key_b: "T1" },
+                    { a: "Yeni bir çevreye girdim: Hızla yeni insanlarla tanışır ve bir ağ kurarım.", b: "Yeni bir çevreye girdim: Sadece az sayıda ve 'benim gibi' olan insanlarla derin bağ kurarım.", key_a: "T3", key_b: "T4" },
+                    { a: "Ekibimden biri hata yaptı: Standartları ve süreçleri netleştirir, 'doğru' yolu gösteririm.", b: "Ekibimden biri hata yaptı: Onu anladığımı hissettirir, duygusal olarak destek (koçluk) veririm.", key_a: "T1", key_b: "T2" },
+                    { a: "Aşırı yük altındayım: Görevleri delege eder ve kontrolü elden bırakmam.", b: "Aşırı yük altındayım: Kendi alanıma çekilir, tek başıma ve odaklanarak halletmeye çalışırım.", key_a: "T8", key_b: "T5" }
+                ]
+            }
+        ];
+
+
+        // ========================================================================
+        // DETAYLI TİP TANIMLARI VE YORUMLARI (TAM LİSTE)
+        // ========================================================================
+
+        const typeInfo = {
+            T1: {
+                name: "Tip 1 – Mükemmeliyetçi (Reformer)",
+                desc: "Doğruluk, sorumluluk, sistem kurma, idealizm ön plandadır.",
+                detailedDesc: "Tip 1, 'Mükemmeliyetçi' veya 'Reformcu' olarak bilinir. Temel motivasyonu, rasyonel ve prensipli bir şekilde hareket ederek dünyayı daha iyi bir yer haline getirmek ve 'doğru' olanı yapmaktır. İçsel bir 'eleştirmen' sesi çok güçlüdür; bu ses onlara sürekli neyin yanlış olduğunu, neyin düzeltilmesi gerektiğini söyler. Bu durum, onları son derece sorumlu, disiplinli ve çalışkan yapar ancak aynı zamanda kendilerine ve başkalarına karşı aşırı eleştirel olmalarına yol açabilir. Temel Korkusu: Kötü, yozlaşmış, kusurlu veya 'yanlış' olmaktır. Temel Arzusu: İyi, dürüst, erdemli ve tutarlı olmaktır.",
+                famousExamples: ["Nelson Mandela", "Konfüçyüs", "Angela Merkel", "Hillary Clinton", "Michelle Obama"],
+                wings: {
+                    w9: "<strong>1w9 ('İdealist'):</strong> Bu kanat, Tip 1'in prensipli doğasını Tip 9'un sakin ve mesafeli enerjisiyle birleştirir. 1w9'lar genellikle daha az dışa dönük, daha entelektüel ve daha sakindirler. İdealleri konusunda tutkuludurlar ancak bu idealleri bir 1w2 kadar aktif bir şekilde 'dışarıya' savunmak yerine, daha çok kendi içlerinde ve çalışmalarında yaşarlar. Daha felsefi ve objektif bir duruş sergilerler.",
+                    w2: "<strong>1w2 ('Savunucu'):</strong> Bu kanat, Tip 1'in doğruluk arayışını Tip 2'nin insan odaklı yardımseverliği ile birleştirir. 1w2'ler, 1w9'lara göre daha dışa dönük, daha sıcakkanlı ve başkalarına yardım etmeye daha odaklıdırlar. İdealleri sadece 'doğru' olmakla kalmaz, aynı zamanda 'iyi' ve 'yardımcı' olmaktır. Başkalarının ihtiyaçlarını fark eder ve dünyayı düzeltme misyonlarını insanlar üzerinden gerçekleştirmeye çalışırlar. Eleştirel yönleri, sevdiklerini 'iyileştirme' çabası olarak ortaya çıkabilir."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 4'e gider):</strong> Tip 1, normalde mantıklı ve kontrollüyken, yoğun stres altında veya 'yanlış' yaptığını hissettiğinde Tip 4'ün sağlıksız yönlerine kayar. Bu durumda, normalde bastırdığı duygular yüzeye çıkar. Kendini melankolik, anlaşılmamış, kusurlu ve yabancılaşmış hisseder. İçsel eleştirmen, onu 'yetersiz' olmakla suçlar ve duygusal dalgalanmalar yaşar.",
+                comfortDesc: "<strong>Rahatladığında (Tip 7'ye gider):</strong> Tip 1, kendini güvende, başarılı ve 'doğru' yolda hissettiğinde, içsel eleştirmenini susturur ve Tip 7'nin sağlıklı yönlerine gider. Bu, onların daha rahat, esprili, spontane ve iyimser olmalarını sağlar. Hayatın keyifli yanlarını fark eder, katı kurallarını esnetir ve yeni fikirlere açık hale gelirler. Dünyayı 'düzeltilmesi gereken bir yer' olarak değil, 'keyif alınacak bir yer' olarak da görebilirler."
+            },
+            T2: {
+                name: "Tip 2 – Yardımsever (Helper)",
+                desc: "Empati, destek ve duygusal bağ arayışı güçlüdür.",
+                detailedDesc: "Tip 2, 'Yardımsever' veya 'Verici' olarak bilinir. Temel motivasyonu, başkaları tarafından sevilmek, istenmek ve takdir edilmektir. Bunu, başkalarının ihtiyaçlarını kendi ihtiyaçlarının önünde tutarak ve onlara cömertçe yardım ederek sağlamaya çalışırlar. İnanılmaz derecede empatik, sıcakkanlı ve ilişki odaklıdırlar. Başkalarının duygularını ve ihtiyaçlarını sezgisel olarak anlarlar. Ancak bu durum, kendi ihtiyaçlarını ihmal etmelerine veya sevilmek için manipülatif bir şekilde 'verici' olmalarına yol açabilir. Temel Korkusu: İstenmemek, sevilmemek veya ihtiyaç duyulmayacak biri olmaktır. Temel Arzusu: Koşulsuz sevgi ve kabul görmektir.",
+                famousExamples: ["Dolly Parton", "Rahibe Teresa", "Desmond Tutu", "Müge Anlı", "Nancy Reagan"],
+                wings: {
+                    w1: "<strong>2w1 ('Hizmetkar'):</strong> Bu kanat, Tip 2'nin yardımseverliğini Tip 1'in prensipli ve ahlakçı doğasıyla birleştirir. 2w1'ler, 'doğru' olanı yapmaya odaklı, daha ciddi ve sorumlu yardımseverlerdir. Sevgilerini, başkalarına 'doğru' yolu göstererek veya onlar için fedakarlık yaparak gösterirler. Daha az kişisel, daha çok 'görev odaklı' bir yardım etme biçimleri vardır. Eleştiriye 2w3'ten daha duyarlıdırlar.",
+                    w3: "<strong>2w3 ('Ev Sahibi' / 'Etkileyici'):</strong> Bu kanat, Tip 2'nin vericiliğini Tip 3'ün dışa dönük, imaj odaklı ve hırslı enerjisiyle birleştirir. 2w3'ler, sosyal ortamlarda parlayan, karizmatik, enerjik ve 'bağlantı kuran' kişilerdir. Yardım etme eylemleri, başkalarını etkilemek ve takdir toplamakla daha çok ilişkilidir. İlişkilerde ve sosyal çevrelerde merkezi bir figür olmayı severler. Daha hırslı ve imajlarına daha duyarlıdırlar."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 8'e gider):</strong> Tip 2, normalde sevecen ve uyumluyken, ihtiyaçları karşılanmadığında, sevilmediğini veya kullanıldığını hissettiğinde Tip 8'in sağlıksız yönlerine kayar. Bu durumda, bastırdığı öfke aniden patlar. Kontrolcü, talepkar ve suçlayıcı hale gelebilirler. 'Benim için kimse bir şey yapmıyor!' diyerek, normalde gizledikleri ihtiyaçlarını agresif bir şekilde talep ederler.",
+                comfortDesc: "<strong>Rahatladığında (Tip 4'e gider):</strong> Tip 2, kendini güvende, sevilmiş ve takdir edilmiş hissettiğinde, başkalarına odaklanmayı bırakıp Tip 4'ün sağlıklı yönlerine gider. Bu, onların kendi iç dünyalarına dönmelerini, kendi duygularını ve ihtiyaçlarını fark etmelerini sağlar. Daha yaratıcı, özgün ve samimi hale gelirler. Kendi kimliklerini, başkalarına verdikleri 'hizmet' üzerinden değil, kendi içsel değerleri üzerinden tanımlamaya başlarlar."
+            },
+            T3: {
+                name: "Tip 3 – Başarı Odaklı (Performer)",
+                desc: "Hedef belirleyen, üretken, kendini kanıtlamayı seven, enerjik ve dışa dönük.",
+                detailedDesc: "Tip 3, 'Başaran' veya 'Etkileyici' olarak bilinir. Temel motivasyonu, değerli olmak ve başkalarının hayranlığını kazanmaktır. Değerli olmanın yolunun 'başarılı' olmaktan geçtiğine inanırlar. Hırslı, enerjik, çalışkan ve son derece uyum sağlayabilen kişilerdir. Girdikleri ortamın 'başarı' tanımını hızla anlar ve o imaja bürünürler. Hedef odaklıdırlar ve genellikle çok üretkendirler. Ancak bu süreçte, gerçek duygularından ve kim olduklarından kolayca kopabilirler. Temel Korkusu: Değersiz olmak, başarısız olmak veya bir 'hiç' olmaktır. Temel Arzusu: Değerli, başarılı ve hayranlık duyulan biri olmaktır.",
+                famousExamples: ["Oprah Winfrey", "Tony Robbins", "Taylor Swift", "Cristiano Ronaldo", "Cem Yılmaz"],
+                wings: {
+                    w2: "<strong>3w2 ('Karizmatik'):</strong> Bu kanat, Tip 3'ün başarı hırsını Tip 2'nin insan odaklı ve yardımsever doğasıyla birleştirir. 3w2'ler, 3w4'lere göre çok daha dışa dönük, sosyal ve ilişki odaklıdırlar. Başarıyı, insanlar arasında popüler ve sevilen biri olmak olarak tanımlarlar. Karizmatik, motive edici ve harika bir 'halkla ilişkiler' yüzüdürler. İnsanları etkilemeyi ve onlara 'yardım etmeyi' severler, bu da imajlarını güçlendirir.",
+                    w4: "<strong>3w4 ('Profesyonel'):</strong> Bu kanat, Tip 3'ün hırsını Tip 4'ün özgünlük ve derinlik arayışıyla birleştirir. 3w4'ler, 3w2'lere göre daha içe dönük, daha ciddi ve daha 'sanatsal' veya 'uzman' bir imaja odaklanırlar. Başarı onlar için sadece popülerlik değil, aynı zamanda yaptıkları işte 'en iyi' ve 'özgün' olmaktır. İmajları daha sofistike ve derindir. Başarı ve özgünlük arasında bir gerilim yaşayabilirler."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 9'a gider):</strong> Tip 3, normalde enerjik ve üretkenken, başarısızlık korkusuyla yüzleştiğinde veya imajı sarsıldığında Tip 9'un sağlıksız yönlerine kayar. Bu durumda, aniden tüm enerjileri çekilir. Apatik, eylemsiz ve 'boşvermiş' bir hale bürünürler. Üretkenlikleri durur, sorumluluklardan kaçar ve pasif bir şekilde geri çekilirler. Enerjileri tükenmiş hissederler.",
+                comfortDesc: "<strong>Rahatladığında (Tip 6'ya gider):</strong> Tip 3, kendini güvende, başarılı ve değerli hissettiğinde, 'imaj' yaratma ihtiyacını bırakıp Tip 6'nın sağlıklı yönlerine gider. Bu, onların daha işbirlikçi, sadık ve samimi olmalarını sağlar. Başarıyı sadece kişisel bir zafer olarak değil, bir ekibin parçası olarak da görmeye başlarlar. Başkalarına güvenirler ve daha planlı, sorumlu bir şekilde hareket ederler. Kendi 'gerçek' duygularıyla daha fazla temas kurarlar."
+            },
+            T4: {
+                name: "Tip 4 – Romantik (Individualist)",
+                desc: "Duygusal derinlik, estetik, özgünlük arayışı.",
+                detailedDesc: "Tip 4, 'Bireyci' veya 'Romantik' olarak bilinir. Temel motivasyonu, kendi özgün kimliğini bulmak ve ifade etmektir. Duygusal olarak derin, yoğun ve içe dönük bir yapıları vardır. Dünyayı estetik ve anlam üzerinden algılarlar. Genellikle kendilerini başkalarından farklı, özel ve 'anlaşılmamış' hissederler. Eksik olan bir şeye karşı bir 'özlem' duyma eğilimindedirler. Bu durum onları yaratıcı, empatik ve duyarlı yapsa da, aynı zamanda melankoliye ve duygusal çalkantılara yatkın hale getirebilir. Temel Korkusu: Bir kimliğe sahip olmamak, sıradan, kusurlu veya anlamsız olmaktır. Temel Arzusu: Kendisi olmak, özgün bir kimlik bulmak ve derin anlamı keşfetmektir.",
+                famousExamples: ["Frida Kahlo", "Johnny Depp", "Lady Gaga", "Edgar Allan Poe", "Sezen Aksu"],
+                wings: {
+                    w3: "<strong>4w3 ('Aristokrat'):</strong> Bu kanat, Tip 4'ün derinliğini Tip 3'ün imaj ve başarı odaklılığıyla birleştirir. 4w3'ler, 4w5'lere göre daha dışa dönük, daha gösterişli ve sosyal olarak daha beceriklidirler. Özgünlüklerini, 'başarılı' ve 'estetik' bir imaj üzerinden sunmak isterler. Sanatlarını veya kimliklerini dünyaya duyurma konusunda daha hırslıdırlar. Daha dramatik ve imajlarına duyarlı olabilirler.",
+                    w5: "<strong>4w5 ('Bohem'):</strong> Bu kanat, Tip 4'ün duygusal derinliğini Tip 5'in entelektüel ve içe dönük doğasıyla birleştirir. 4w5'ler, 4w3'lere göre çok daha içe dönük, daha felsefi ve daha 'alışılmadık' bir tarza sahiptirler. Duygularını entelektüel bir süzgeçten geçirirler. Daha az sosyaldirler ve 'anlaşılmamayı' bir dereceye kadar tercih edebilirler. Daha gizemli ve gözlemci bir duruşları vardır."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 2'ye gider):</strong> Tip 4, normalde kendi iç dünyasına odaklıyken, reddedildiğini, anlaşılmadığını veya yetersiz olduğunu hissettiğinde Tip 2'nin sağlıksız yönlerine kayar. Bu durumda, aniden dışa döner ve başkalarına 'yapışır'. Sevilmek ve onaylanmak için çaresizce başkalarına yardım etmeye, onların hayatlarına müdahil olmaya başlar. Kendi kimliğini kaybetme korkusuyla, başkalarının hayatında 'vazgeçilmez' olmaya çalışır, bu da genellikle geri teper.",
+                comfortDesc: "<strong>Rahatladığında (Tip 1'e gider):</strong> Tip 4, kendini güvende, anlaşılmış ve özgünlüğünü ifade edebilmiş hissettiğinde, duygusal çalkantıları bırakıp Tip 1'in sağlıklı yönlerine gider. Bu, onların daha disiplinli, prensipli ve eyleme dönük olmalarını sağlar. Yaratıcılıklarını sadece hissetmekle kalmaz, aynı zamanda 'iş' haline getirip somut bir ürüne dönüştürebilirler. Duygusal tepkisellik azalır, yerini daha rasyonel ve sorumlu bir davranış alır."
+            },
+            T5: {
+                name: "Tip 5 – Gözlemci (Investigator)",
+                desc: "Bilgiye, içe dönüklüğe, bağımsızlığa yönelir.",
+                detailedDesc: "Tip 5, 'Araştırmacı' veya 'Gözlemci' olarak bilinir. Temel motivasyonu, dünyayı anlamak, bilgi toplamak ve 'yeterli' olmaktır. Dünyayı, enerjilerini ve kaynaklarını tüketen, talepkar bir yer olarak algılarlar. Bu yüzden, başkalarıyla aralarına bir mesafe koyar, yalnız kalmayı tercih eder ve bilgi biriktirerek kendilerini güvende hissetmeye çalışırlar. Analitik, objektif ve son derece bağımsızdırlar. Duygusal dünyadan ziyade zihinsel dünyaya güvenirler. Temel Korkusu: Yetersiz, aciz veya bilgisiz olmaktır. Temel Arzusu: Yetkin, bilgili ve yeterli olmaktır.",
+                famousExamples: ["Bill Gates", "Albert Einstein", "Stephen Hawking", "Mark Zuckerberg", "Aziz Sancar"],
+                wings: {
+                    w4: "<strong>5w4 ('İkonoklast' / 'Kâşif'):</strong> Bu kanat, Tip 5'in entelektüel dünyasını Tip 4'ün özgünlük ve estetik arayışıyla birleştirir. 5w4'ler, 5w6'lara göre daha duygusal, daha yaratıcı ve daha 'sıra dışı' olma eğilimindedirler. Bilgileri, genellikle daha felsefi, sanatsal veya soyut alanlardadır. Kendi iç dünyaları çok zengindir. Daha melankolik ve insanlardan daha kopuk olabilirler.",
+                    w6: "<strong>5w6 ('Problem Çözücü'):</strong> Bu kanat, Tip 5'in bilgi arayışını Tip 6'nın güvenlik ve planlama odaklılığıyla birleştirir. 5w6'lar, 5w4'lere göre daha pratik, daha analitik ve daha 'gerçek dünya' odaklıdırlar. Bilgiyi, sistemleri anlamak, sorunları çözmek ve potansiyel tehlikeleri öngörmek için kullanırlar. Daha sadık ve işbirlikçi olabilirler, ancak aynı zamanda daha kaygılı ve şüpheci bir yapıları da vardır."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 7'ye gider):</strong> Tip 5, normalde içe dönük ve minimalistken, kendini yetersiz hissettiğinde veya alanı istila edildiğinde Tip 7'nin sağlıksız yönlerine kayar. Bu durumda, normalde kaçındığı dış dünyaya aniden, hiperaktif bir şekilde dalar. Odaklanamaz, bir konudan diğerine atlar, dikkati dağılır ve anlamsızca 'keyif' veya 'kaçış' aktivitelerine (oyun, yeme, vb.) yönelebilir. Bu, zihinsel yorgunluktan kaçma çabasıdır.",
+                comfortDesc: "<strong>Rahatladığında (Tip 8'e gider):</strong> Tip 5, kendini güvende, bilgili ve yeterli hissettiğinde, gözlem kulesinden inip Tip 8'in sağlıklı yönlerine gider. Bu, onların daha kararlı, eyleme dönük ve lider bir tavır sergilemelerini sağlar. Biriktirdikleri bilgiyi dünyayla paylaşmak, bir projeye liderlik etmek veya bir konuda net bir duruş sergilemek için kendilerini güçlü hissederler. Geri çekilmek yerine, 'kontrolü ele alırlar'."
+            },
+            T6: {
+                name: "Tip 6 – Sadık Sorgulayıcı (Loyalist)",
+                desc: "Güvenlik, planlama ve sadakat önemlidir.",
+                detailedDesc: "Tip 6, 'Sadık Sorgulayıcı' olarak bilinir. Temel motivasyonu, güvenlik ve destek bulmaktır. Dünyayı belirsiz ve potansiyel olarak tehlikeli bir yer olarak algılarlar. Bu nedenle, en kötü senaryoları düşünür, planlar yapar ve güvenebilecekleri bir otorite, sistem veya inanç ararlar. Son derece sadık, sorumlu ve çalışkandırlar. Ancak aynı zamanda kaygı, şüphe ve kararsızlık yaşamaya da çok yatkındırlar. İki alt türü vardır: 'Fobik' 6 (tehlikeden kaçan) ve 'Kontra-fobik' 6 (tehlikenin üstüne giden). Temel Korkusu: Güvende olmamak, desteksiz kalmak veya ihanete uğramaktır. Temel Arzusu: Güvenlik, istikrar ve güvende hissetmektir.",
+                famousExamples: ["Tom Hanks", "Prens Harry", "Ellen DeGeneres", "Sigmund Freud"],
+                wings: {
+                    w5: "<strong>6w5 ('Savunmacı'):</strong> Bu kanat, Tip 6'nın güvenlik arayışını Tip 5'in entelektüel ve içe dönük doğasıyla birleştirir. 6w5'ler, 6w7'lere göre daha ciddi, daha analitik ve daha az sosyaldirler. Güvenliği, 'bilgi' ve 'sistemler' üzerinden ararlar. Dünyayı anlamak için ideolojilere veya teknik bilgilere güvenirler. Otoriteyi daha fazla sorgularlar ve daha mesafeli dururlar.",
+                    w7: "<strong>6w7 ('Dost'):</strong> Bu kanat, Tip 6'nın kaygısını Tip 7'nin iyimser ve dışa dönük enerjisiyle birleştirir. 6w7'ler, 6w5'lere göre çok daha sosyal, daha eğlenceli ve daha 'hafif' görünürler. Kaygılarıyla, sosyal bağlar kurarak, eğlenceli aktivitelere katılarak veya 'her şey yolunda' diyerek başa çıkmaya çalışırlar. Güvenliği, 'insanlar' ve 'ilişkiler' üzerinden ararlar. Daha kararsız olabilirler."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 3'e gider):</strong> Tip 6, normalde dikkatli ve planlıyken, kaygıları arttığında veya kendini desteksiz hissettiğinde Tip 3'ün sağlıksız yönlerine kayar. Bu durumda, güvenliklerini 'başarı' ve 'imaj' üzerinden sağlamaya çalışırlar. Aniden aşırı çalışkan kesilir, 'meşgul' görünür, imajlarına takıntılı hale gelirler. Gerçek kaygılarının üstünü, 'üretken' veya 'başarılı' bir maskeyle örtmeye çalışırlar.",
+                comfortDesc: "<strong>Rahatladığında (Tip 9'a gider):</strong> Tip 6, kendini güvende, desteklenmiş ve 'doğru yolda' hissettiğinde, zihnindeki kaygılı senaryoları bırakıp Tip 9'un sağlıklı yönlerine gider. Bu, onların daha sakin, daha rahat ve daha az tepkisel olmalarını sağlar. En kötü senaryoyu düşünmek yerine, 'akışa güvenirler'. Başkalarına ve kendilerine olan şüpheleri azalır, içsel bir huzur ve kabullenme hissederler."
+            },
+            T7: {
+                name: "Tip 7 – Maceracı (Enthusiast)",
+                desc: "Yeniliğe, özgürlüğe, keyfe ve heyecana düşkündür.",
+                detailedDesc: "Tip 7, 'Maceracı' veya 'Keyif Alan' olarak bilinir. Temel motivasyonu, özgür olmak, acıdan kaçınmak ve hayatın sunduğu tüm keyifleri deneyimlemektir. Dünyayı bir 'oyun alanı' olarak görürler ve kısıtlanmaktan nefret ederler. İyimser, enerjik, hızlı düşünen ve son derece meraklıdırlar. Zihinleri sürekli yeni fikirler, planlar ve olasılıklarla doludur. Ancak bu durum, odaklanmakta zorlanmalarına, sorumluluktan kaçmalarına ve olumsuz duygularla yüzleşmekten kaçınmalarına neden olabilir. Temel Korkusu: Acı çekmek, kısıtlanmak, mahrum kalmak veya 'tuzağa düşmek'tir. Temel Arzusu: Mutlu, özgür ve tatmin olmuş olmaktır.",
+                famousExamples: ["Robin Williams", "Jim Carrey", "Leonardo DiCaprio", "Richard Branson", "Mozart"],
+                wings: {
+                    w6: "<strong>7w6 ('Eğlendirici'):</strong> Bu kanat, Tip 7'nin keyif arayışını Tip 6'nın güvenlik ve ilişki odaklılığıyla birleştirir. 7w6'lar, 7w8'lere göre daha sosyal, daha 'sevimli' ve başkalarının onayına daha bağımlıdırlar. Eğlenceyi, 'insanlarla birlikte' deneyimlemek isterler. Kaygılarını, sosyal olarak aktif ve eğlenceli görünerek bastırırlar. Daha sadık ama aynı zamanda daha kaygılı bir 7 profilidir.",
+                    w8: "<strong>7w8 ('Gerçekçi' / 'Fırsatçı'):</strong> Bu kanat, Tip 7'nin macera arayışını Tip 8'in güçlü ve kontrolcü enerjisiyle birleştirir. 7w8'ler, 7w6'lara göre daha iddialı, daha pragmatik ve daha 'dünyevi' zevklere odaklıdırlar. Keyif almak için 'güce' ve 'kaynaklara' ihtiyaç duyduklarını bilirler. Daha az kaygılı, daha kararlı ve istediklerini alma konusunda daha agresif olabilirler. Liderlik özellikleri daha belirgindir."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 1'e gider):</strong> Tip 7, normalde esnek ve iyimserken, kendini kapana kısılmış veya seçenekleri tükenmiş hissettiğinde Tip 1'in sağlıksız yönlerine kayar. Bu durumda, aniden katı, eleştirel ve mükemmeliyetçi olurlar. Hem kendilerini hem de başkalarını 'yeterince iyi değil' diye suçlarlar. O iyimser tavır gider, yerine 'doğru olan bu değil' diyen kuralcı ve yargılayıcı bir ses gelir.",
+                comfortDesc: "<strong>Rahatladığında (Tip 5'e gider):</strong> Tip 7, kendini güvende hissettiğinde, tüm seçenekleri deneyimleme ihtiyacını bırakıp Tip 5'in sağlıklı yönlerine gider. Bu, onların hiperaktif zihinlerini yavaşlatmalarını ve 'derinleşmelerini' sağlar. Yüzeysel keyifler yerine, bir konuya odaklanır, o konuda uzmanlaşır ve daha derin bir tatmin bulurlar. Yalnız kalmaktan ve zihinsel olarak derinleşmekten keyif almaya başlarlar."
+            },
+            T8: {
+                name: "Tip 8 – Güçlü Lider (Challenger)",
+                desc: "Gücü, kontrolü ve kararlılığı önemser. Liderlik, kararlılık ve koruyuculuk baskındır.",
+                detailedDesc: "Tip 8, 'Meydan Okuyan' veya 'Lider' olarak bilinir. Temel motivasyonu, kendi hayatının kontrolünü elinde tutmak ve zayıf görünmekten (kontrol edilmekten) kaçınmaktır. Dünyayı 'güçlüler' ve 'zayıflar' olarak ayırır ve her zaman güçlü tarafta olmak isterler. Son derece kararlı, iddialı, koruyucu ve doğrudan kişilerdir. Enerjileri yüksektir ve 'fazla' gelebilirler. Adaletsizliğe karşı aşırı duyarlıdırlar ve 'kendi' insanlarını korumak için her şeyi yaparlar. Ancak bu durum, onları agresif, kontrolcü ve başkalarının duygularına karşı duyarsız yapabilir. Temel Korkusu: Zayıf olmak, kontrol edilmek, savunmasız veya manipüle edilmektir. Temel Arzusu: Kendi kaderini kontrol etmek ve kendini (ve sevdiklerini) korumaktır.",
+                famousExamples: ["Winston Churchill", "Martin Luther King Jr.", "Donald Trump", "Fatih Terim", "Sean Penn"],
+                wings: {
+                    w7: "<strong>8w7 ('Bağımsız'):</strong> Bu kanat, Tip 8'in gücünü Tip 7'nin keyif ve macera arayışıyla birleştirir. 8w7'ler, 8w9'lara göre daha dışa dönük, daha enerjik, daha hırslı ve daha 'fırsatçı'dırlar. Gücü, 'hayattan istediklerini almak' ve 'özgür olmak' için isterler. Daha az sabırlı, daha fazla risk alan ve daha gösterişli bir liderlik tarzları vardır. İş ve eğlenceyi birleştirmeyi severler.",
+                    w9: "<strong>8w9 ('Ayı'):</strong> Bu kanat, Tip 8'in kontrolcü doğasını Tip 9'un sakin ve barışçıl enerjisiyle birleştirir. 8w9'lar, 8w7'lere göre daha sakin, daha sabırlı ve daha 'içeriden' güçlüdürler. Daha az tepkiseldirler; enerjilerini sadece 'gerekli' olduğunda patlatırlar. Daha yavaş hareket ederler ama bir kez karar verdiklerinde durdurulmaları imkansızdır. 'Sakin güç' profilidirler. Daha koruyucu ve babacan bir tavırları olabilir."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 5'e gider):</strong> Tip 8, normalde dışa dönük ve eylem odaklıyken, kontrolü kaybettiğini veya yenildiğini hissettiğinde Tip 5'in sağlıksız yönlerine kayar. Bu durumda, aniden sosyal ortamdan çekilir, 'sığınağına' kapanır. Paranoyak düşünceler geliştirir, bilgi toplar ve 'komplo teorileri' üretir. Dışarıya karşı agresif olmak yerine, içe döner ve sessizce bir sonraki hamlesini planlar.",
+                comfortDesc: "<strong>Rahatladığında (Tip 2'ye gider):</strong> Tip 8, kendini güvende, kontrol altında ve 'saygı duyulan' hissettiğinde, o sert kabuğu indirip Tip 2'nin sağlıklı yönlerine gider. Bu, onların daha sevecen, daha cömert ve daha koruyucu olmalarını sağlar. Savunmasız yanlarını açar, duygusal bağ kurar ve sevdiklerine 'yardım etme' konusunda daha yumuşak bir yaklaşım sergilerler. Güçlerini, 'kontrol' için değil, 'destek' için kullanmaya başlarlar."
+            },
+            T9: {
+                name: "Tip 9 – Uyumlu (Peacemaker)",
+                desc: "Huzur, uyum, sakinlik ve denge arayışı.",
+                detailedDesc: "Tip 9, 'Barışçı' veya 'Uzlaştırıcı' olarak bilinir. Temel motivasyonu, içsel huzuru korumak ve dışsal çatışmalardan kaçınmaktır. Sakin, uyumlu, sabırlı ve kabullenici bir yapıları vardır. Genellikle 'kolay' insanlardır ve başkalarının bakış açılarını anlama konusunda inanılmaz bir yetenekleri vardır. Ancak bu durum, kendi ihtiyaçlarını, isteklerini ve öfkelerini bastırmalarına, kararsız kalmalarına ve eylemsizliğe (atalet) düşmelerine neden olabilir. Kendi önceliklerini belirlemekte zorlanırlar. Temel Korkusu: Çatışma yaşamak, kayıp yaşamak, birinden 'ayrılmak' veya içsel huzurunu kaybetmektir. Temel Arzusu: İçsel huzur, sükunet ve bütünlük halinde olmaktır.",
+                famousExamples: ["Keanu Reeves", "Dalai Lama", "Barack Obama", "Audrey Hepburn", "Snoop Dogg"],
+                wings: {
+                    w8: "<strong>9w8 ('Hakem'):</strong> Bu kanat, Tip 9'un barışçıl doğasını Tip 8'in güçlü ve iddialı enerjisiyle birleştirir. 9w8'ler, 9w1'lere göre daha dışa dönük, daha kararlı ve daha 'sağlam' duruşludurlar. Huzuru severler ama 'rahat bırakılmak' için savaşabilirler. Daha topraklanmış ve pratiktirler. Öfkelerini 9w1'lere göre daha net (ama yine de gecikmeli) gösterebilirler. Daha iddialı ve inatçı olabilirler.",
+                    w1: "<strong>9w1 ('Hayalperest' / 'Arabulucu'):</strong> Bu kanat, Tip 9'un uyum arayışını Tip 1'in prensipli ve idealist doğasıyla birleştirir. 9w1'ler, 9w8'lere göre daha içe dönük, daha düzenli ve daha 'idealist' bir barış arayışındadırlar. Sadece 'huzur' değil, 'doğru' olan huzuru ararlar. Daha disiplinli ve sorumlu davranırlar. Çatışmadan kaçınırlar çünkü çatışma 'doğru' değildir. Öfkelerini daha çok bastırır ve ahlaki bir üstünlük olarak sunabilirler."
+                },
+                stressDesc: "<strong>Stres Altında (Tip 6'ya gider):</strong> Tip 9, normalde sakin ve uyumluyken, huzuru bozulduğunda veya baskı altında kaldığında Tip 6'nın sağlıksız yönlerine kayar. Bu durumda, o sakin tavır gider, yerine kaygı, endişe ve en kötü senaryoyu düşünme hali gelir. Herkesten ve her şeyden şüphe duymaya başlarlar. Güvenliklerini kaybetme korkusu yaşar, pasif-agresif ve reaktif hale gelirler.",
+                comfortDesc: "<strong>Rahatladığında (Tip 3'e gider):</strong> Tip 9, kendini güvende, huzurlu ve 'görülmüş' hissettiğinde, pasif atalet halinden çıkıp Tip 3'ün sağlıklı yönlerine gider. Bu, onların kendi değerlerini fark etmelerini ve eyleme geçmelerini sağlar. 'Benim isteklerim de önemli' derler ve hedefler belirleyip bu hedefler için çalışmaya başlarlar. Uyumlu olmaktan, 'etkili' olmaya doğru bir geçiş yaparlar. Enerjileri artar ve daha üretken olurlar."
+            }
+        };
+
+        // ========================================================================
+        // YENİ: ÜÇLÜ TİP (TRITYPE) İSİM VERİTABANI
+        // ========================================================================
+        const tritypeNames = {
+            "125": "Akıl Hocası", "126": "Yardımcı", "127": "Öğretmen",
+            "135": "Teknisyen", "136": "Süpervizör", "137": "Sistem Kurucu",
+            "145": "Araştırmacı", "146": "Filozof", "147": "Vİzyoner",
+            "258": "Stratejist", "259": "Problem Çözücü", "268": "Koruyucu",
+            "269": "İyi Samarit", "278": "Özgür Ruh", "279": "İyimser",
+            "358": "Çözüm Ustası", "359": "Düşünür", "368": "Adalet Savaşçısı",
+            "369": "Arabulucu", "378": "Harekete Geçirici", "379": "Büyüleyici",
+            "458": "Bilge", "459": "Dalgın", "468": "Gerçeği Arayan",
+            "469": "Arayıcı", "478": "Haberci", "479": "Nazik Ruh"
+        };
+        // Not: 125, 152, 215, 251, 512, 521 permütasyonları aynı arketipi paylaşır.
+        // Kod, bunu hesaplayacak şekilde yazılmıştır.
+
+        // ========================================================================
+        // YENİ: TEST MANTIĞI (LOGIC) - "MÜKEMMEL ANALİZ" İÇİN GÜNCELLENDİ
+        // ========================================================================
+        
+        // --- Durum Değişkenleri ---
+        let currentSectionIndex = 0, currentQuestionIndex = 0, totalQuestions = 0, answeredQuestions = 0;
+        let scores = { T1: 0, T2: 0, T3: 0, T4: 0, T5: 0, T6: 0, T7: 0, T8: 0, T9: 0 };
+        let answerHistory = [], backButtonCount = 0, isEliminated = false;
+        let userName = "Anonim"; // Kullanıcı adını saklamak için
+
+        // --- DOM Elementleri ---
+        const introContainer = document.getElementById('intro-container');
+        const startButton = document.getElementById('start-button');
+        const nameInput = document.getElementById('name-input');
+        const testContainer = document.getElementById('test-container'), resultsContainer = document.getElementById('results-container');
+        const sectionTitle = document.getElementById('section-title'), btnA = document.getElementById('btn-a'), btnB = document.getElementById('btn-b');
+        const progressBar = document.getElementById('progress-bar'), progressText = document.getElementById('progress-text');
+        const resultsTableBody = document.getElementById('results-table-body').getElementsByTagName('tbody')[0], btnBack = document.getElementById('btn-back');
+        
+        // --- Testi Başlatma Fonksiyonu ---
+        startButton.addEventListener('click', function() {
+            userName = nameInput.value.trim();
+            if (userName === "") { userName = "Anonim"; }
+            introContainer.style.display = 'none';
+            testContainer.style.display = 'block';
+            initializeTest();
+        });
+
+        // --- Diğer Fonksiyonlar (handleBack, handleAnswer vb. - DEĞİŞİKLİK YOK) ---
+        function initializeTest() {
+            totalQuestions = questions.reduce((acc, section) => acc + section.items.length, 0);
+            loadQuestion(); updateProgress();
+        }
+        function loadQuestion() {
+            if (isEliminated) return; if (currentSectionIndex >= questions.length) { showResults(); return; }
+            const section = questions[currentSectionIndex]; const question = section.items[currentQuestionIndex];
+            sectionTitle.textContent = section.section; btnA.innerHTML = `<span>A)</span> ${question.a}`; btnB.innerHTML = `<span>B)</span> ${question.b}`;
+            btnBack.disabled = answerHistory.length === 0;
+        }
+        function updateProgress() {
+            if (isEliminated) return; const percentage = (answeredQuestions / totalQuestions) * 100;
+            progressBar.style.width = percentage + '%'; progressText.textContent = `Soru ${answeredQuestions + 1} / ${totalQuestions}`;
+        }
+        function showEliminationScreen() {
+            isEliminated = true;
+            testContainer.innerHTML = `<h1 class="eliminated">Test Sonlandırıldı</h1><h2 class="eliminated" style="font-weight:500;">Çok kararsızsın elendin.</h2><p style="text-align: center; font-size: 1.1rem; line-height: 1.6; color: #b3b3b3;">Bir kişilik testi, anlık ve dürüst tepkilerinizi ölçer. <br>Bu kadar çok geri dönme ihtiyacı hissetmeniz, şu anda net bir sonuç almanızı engelliyor.</p>`;
+        }
+        function handleBack() {
+            if (isEliminated) return; backButtonCount++;
+            if (backButtonCount >= 5) { showEliminationScreen(); return; }
+            if (answerHistory.length === 0) return; const lastAnswer = answerHistory.pop();
+            scores[lastAnswer.scoreKey]--; answeredQuestions--;
+            currentSectionIndex = lastAnswer.sectionIndex; currentQuestionIndex = lastAnswer.questionIndex;
+            loadQuestion(); updateProgress();
+        }
+        function handleAnswer(choice) {
+            if (isEliminated) return;
+            const section = questions[currentSectionIndex]; const question = section.items[currentQuestionIndex];
+            const scoreKey = (choice === 'a') ? question.key_a : question.key_b;
+            if (scores.hasOwnProperty(scoreKey)) { scores[scoreKey]++; }
+            answerHistory.push({ scoreKey: scoreKey, sectionIndex: currentSectionIndex, questionIndex: currentQuestionIndex });
+            answeredQuestions++; currentQuestionIndex++;
+            if (currentQuestionIndex >= section.items.length) { currentSectionIndex++; currentQuestionIndex = 0; }
+            if (currentSectionIndex >= questions.length) { updateProgress(); showResults(); } else { loadQuestion(); updateProgress(); }
+        }
+
+        // ========================================================================
+        // YENİ: "MÜKEMMEL ANALİZ" SONUÇ FONKSİYONU
+        // ========================================================================
+
+        // Yardımcı fonksiyon: Bir merkezdeki en yüksek puanlı tipi bulur
+        function findCenterLeader(scores, centerTypes) {
+            let leaderType = centerTypes[0]; // ör: "T8"
+            let maxScore = scores[leaderType]; // ör: scores["T8"]
+
+            centerTypes.slice(1).forEach(type => {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    leaderType = type;
+                }
+            });
+            return leaderType; // ör: "T1" (eğer T1 > T8 ve T9 ise)
+        }
+
+        // Yardımcı fonksiyon: Tritype ismini bulur (permütasyonları önemsemeden)
+        function getTritypeName(tritypeString) { // "8-3-7"
+            const types = tritypeString.split('-').map(Number).sort((a, b) => a - b); // [3, 7, 8]
+            const key = types.join(''); // "378"
+            
+            // Tüm permütasyonları kontrol et (veritabanı küçük olduğu için bu daha güvenli)
+            const perms = [
+                `${types[0]}${types[1]}${types[2]}`, `${types[0]}${types[2]}${types[1]}`,
+                `${types[1]}${types[0]}${types[2]}`, `${types[1]}${types[2]}${types[0]}`,
+                `${types[2]}${types[0]}${types[1]}`, `${types[2]}${types[1]}${types[0]}`
+            ];
+            
+            for (const p of perms) {
+                if (tritypeNames[p]) {
+                    return tritypeNames[p];
+                }
+            }
+            return "Eşsiz Kombinasyon"; // Eşleşme bulunamazsa
+        }
+
+        async function showResults() {
+            testContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
+            // 1. Puanları Yüzdelere Çevir ve Sırala
+            let results = [];
+            const totalScore = totalQuestions; 
+            for (const typeKey in scores) {
+                const score = scores[typeKey];
+                const percentage = (score / totalScore) * 100;
+                results.push({
+                    type: typeKey, score: score,
+                    percentage: parseFloat(percentage.toFixed(0)),
+                    name: typeInfo[typeKey].name, desc: typeInfo[typeKey].desc
+                });
+            }
+            results.sort((a, b) => b.percentage - a.percentage);
+
+            // 2. Ana Tip, Kanat ve Stres/Rahat Bilgilerini Hesapla
+            const anaTipResult = results[0]; // En yüksek puanlı
+            const anaTipKey = anaTipResult.type; // ör: "T3"
+            const anaTipData = typeInfo[anaTipKey];
+            const anaTipNum = parseInt(anaTipKey.slice(1)); // ör: 3
+
+            // Kanat Hesaplama
+            const wing1Num = (anaTipNum === 1) ? 9 : anaTipNum - 1;
+            const wing2Num = (anaTipNum === 9) ? 1 : anaTipNum + 1;
+            const scoreWing1 = scores['T' + wing1Num];
+            const scoreWing2 = scores['T' + wing2Num];
+            let wingTitle = "";
+            let wingDesc = "";
+            if (scoreWing1 > scoreWing2) {
+                wingTitle = `${anaTipNum}w${wing1Num}`;
+                wingDesc = anaTipData.wings['w' + wing1Num];
+            } else if (scoreWing2 > scoreWing1) {
+                wingTitle = `${anaTipNum}w${wing2Num}`;
+                wingDesc = anaTipData.wings['w' + wing2Num];
+            } else {
+                wingTitle = `${anaTipNum} (Dengeli Kanat)`;
+                wingDesc = `Skorların, ana tipinin her iki komşu kanadına (Tip ${wing1Num} ve Tip ${wing2Num}) da eşit derecede yakın olduğunu gösteriyor. Bu, 'dengeli bir kanat' olarak adlandırılır. Her iki kanadın da özelliklerini duruma göre sergileyebilirsin.`;
+            }
+
+            // 3. YENİ: Üçlü Tip (Tritype) ve Merkez Sıralaması Hesaplama
+            
+            // Merkez Liderlerini Bul
+            const gutLeaderType = findCenterLeader(scores, ["T8", "T9", "T1"]); // ör: "T8"
+            const heartLeaderType = findCenterLeader(scores, ["T2", "T3", "T4"]); // ör: "T3"
+            const headLeaderType = findCenterLeader(scores, ["T5", "T6", "T7"]); // ör: "T7"
+
+            // Ana Tipi başa alarak Tritype sırasını oluştur (örn: 8-3-7)
+            let tritypeOrder = [];
+            const anaTipCenter = (["T8", "T9", "T1"].includes(anaTipKey)) ? 'gut' :
+                                (["T2", "T3", "T4"].includes(anaTipKey)) ? 'heart' : 'head';
+            
+            if (anaTipCenter === 'gut') {
+                tritypeOrder = [gutLeaderType, heartLeaderType, headLeaderType];
+            } else if (anaTipCenter === 'heart') {
+                tritypeOrder = [heartLeaderType, headLeaderType, gutLeaderType];
+            } else { // anaTipCenter === 'head'
+                tritypeOrder = [headLeaderType, gutLeaderType, heartLeaderType];
+            }
+            
+            const tritypeString = tritypeOrder.map(t => t.slice(1)).join('-'); // "8-3-7"
+            const tritypeName = getTritypeName(tritypeString); // "Harekete Geçirici"
+
+            // Merkezlerin Toplam Puanlarını Hesapla
+            const gutScore = scores.T8 + scores.T9 + scores.T1;
+            const heartScore = scores.T2 + scores.T3 + scores.T4;
+            const headScore = scores.T5 + scores.T6 + scores.T7;
+
+            const centers = [
+                { name: "İçgüdü (Eylem)", score: gutScore },
+                { name: "Kalp (Duygu/İmaj)", score: heartScore },
+                { name: "Zihin (Analiz/Korku)", score: headScore }
+            ];
+            centers.sort((a, b) => b.score - a.score); // Puanlara göre sırala
+            
+            const baskinMerkez = centers[0].name;
+            const baskilanmisMerkez = centers[2].name;
+
+            // 4. YENİ: Veri gönderme işlemi
+            // ==================================================================
+            // !!! KRAL, SENİN URL'N BURAYA EKLENDİ !!!
+            // Hiçbir şeyi değiştirme, tam istediğin gibi.
+            // ==================================================================
+            const SIZIN_GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhOeoSh_B_gNFmp_ZMJD-EnOWYwElKYccUw1x6Tz4Mz5AaKQw9HQJNbzYODc3zFwWnqg/exec";
+            // ==================================================================
+
+            const dataToSave = {
+                Isim: userName,
+                Tarih: new Date().toLocaleString("tr-TR"),
+                AnaTip: anaTipData.name,
+                Kanat: wingTitle,
+                Tritype: tritypeString, // YENİ: ör: "8-3-7"
+                TritypeIsmi: tritypeName, // YENİ: ör: "Harekete Geçirici"
+                BaskinMerkez: baskinMerkez, // YENİ: ör: "İçgüdü (Eylem)"
+                BaskilanmisMerkez: baskilanmisMerkez, // YENİ: ör: "Kalp (Duygu/İmaj)"
+                AnaTipYuzde: anaTipResult.percentage + "%",
+                T1: scores.T1, T2: scores.T2, T3: scores.T3,
+                T4: scores.T4, T5: scores.T5, T6: scores.T6,
+                T7: scores.T7, T8: scores.T8, T9: scores.T9
+            };
+
+            // Veriyi arka planda Google Sheet'e gönder
+            try {
+                await fetch(SIZIN_GOOGLE_SCRIPT_URL, {
+                    method: "POST",
+                    mode: "cors",
+                    headers: { "Content-Type": "application/json", },
+                    body: JSON.stringify(dataToSave),
+                });
+            } catch (error) {
+                console.log("Veri gönderme isteği yapıldı. (Olası CORS hatası normaldir)");
+            }
+
+            // 5. Sonuçları Ekrana Bas
+            
+            // Ana Tip
+            document.getElementById('ana-tip-title').textContent = `Ana Tipin: ${anaTipData.name}`;
+            document.getElementById('ana-tip-desc').textContent = anaTipData.detailedDesc;
+            const celebsList = document.getElementById('ana-tip-celebs-list');
+            celebsList.innerHTML = "";
+            anaTipData.famousExamples.forEach(name => {
+                const li = document.createElement('li');
+                li.textContent = name;
+                celebsList.appendChild(li);
+            });
+
+            // YENİ: Üçlü Tip (Tritype)
+            document.getElementById('tritype-desc').innerHTML = `Sizin tam portreniz, "Üçlü Tip" (Tritype) analizi ile ortaya çıkar. Ana tipiniz (${anaTipData.name}), <strong>${tritypeString} (${tritypeName})</strong> olarak bilinen daha büyük bir arketipin parçasıdır.
+            <br><br>
+            Bunun anlamı:
+            <ul>
+                <li><strong>İçgüdü Merkezinizin Lideri: ${typeInfo[gutLeaderType].name.split('–')[0]}</strong></li>
+                <li><strong>Kalp Merkezinizin Lideri: ${typeInfo[heartLeaderType].name.split('–')[0]}</strong></li>
+                <li><strong>Zihin Merkezinizin Lideri: ${typeInfo[headLeaderType].name.split('–')[0]}</strong></li>
+            </ul>
+            Bu üç tip, sizin dünyayı nasıl algıladığınızı, nasıl tepki verdiğinizi ve temel motivasyonlarınızı birlikte oluşturur.`;
+            
+            document.getElementById('center-desc').innerHTML = `<strong>Zeka Merkezi Sıralamanız:</strong><br>
+            1. Baskın Merkeziniz: <strong>${baskinMerkez}</strong> (En çok güvendiğiniz zeka)<br>
+            2. Destekleyici Merkeziniz: <strong>${centers[1].name}</strong><br>
+            3. Baskılanmış Merkeziniz: <strong>${baskilanmisMerkez}</strong> (Gelişime en açık alanınız)`;
+
+            // Kanat
+            document.getElementById('kanat-title').textContent = `Kanadın: ${wingTitle}`;
+            document.getElementById('kanat-desc').innerHTML = wingDesc;
+            
+            // Stres/Rahat
+            document.getElementById('stres-desc').innerHTML = anaTipData.stressDesc;
+            document.getElementById('rahat-desc').innerHTML = anaTipData.comfortDesc;
+
+            // Puan Tablosu
+            resultsTableBody.innerHTML = "";
+            results.forEach(result => {
+                const row = resultsTableBody.insertRow();
+                row.innerHTML = `<td>${result.name}</td><td>${result.desc}</td><td>${result.percentage}%</td>`;
+            });
+        }
+        
+    </script>
+</body>
+</html>
