@@ -1,1 +1,1 @@
-Enneagram chracter test
+Enneagram character test
