@@ -42,68 +42,76 @@
             text-align: left;
             margin-bottom: 30px;
         }
-        
-        /* GİRİŞ BUTONU VE INPUT GÜNCELLENDİ */
         #name-input {
-            max-width: 400px; /* Yeni */
-            width: 100%; /* Yeni */
-            display: block; /* Yeni */
-            margin-left: auto; /* Yeni */
-            margin-right: auto; /* Yeni */
-            box-sizing: border-box; /* Yeni */
-            padding: 15px;
-            font-size: 1rem;
-            background-color: #2a2a2a;
-            border: 2px solid #535353;
-            border-radius: 8px;
-            color: #ffffff;
-            text-align: center;
-            margin-bottom: 25px;
+            max-width: 400px; width: 100%; display: block;
+            margin-left: auto; margin-right: auto; box-sizing: border-box;
+            padding: 15px; font-size: 1rem; background-color: #2a2a2a;
+            border: 2px solid #535353; border-radius: 8px; color: #ffffff;
+            text-align: center; margin-bottom: 25px;
         }
-        #name-input::placeholder {
-            color: #777;
+        #name-input::placeholder { color: #777; }
+        #name-input:focus { outline: none; border-color: #1DB954; }
+        
+        /* Paylaşılan Buton Stili (Spotify Yuvarlak) */
+        .spotify-button {
+            max-width: 400px; width: 100%; display: block;
+            margin-left: auto; margin-right: auto; box-sizing: border-box;
+            padding: 18px; font-size: 1.1rem; font-weight: 700;
+            background-color: #1DB954; color: #ffffff; border: none;
+            border-radius: 50px; cursor: pointer;
+            transition: all 0.2s ease; letter-spacing: 0.5px;
         }
-        #name-input:focus {
-            outline: none;
-            border-color: #1DB954;
+        
+        /* Sadece PC/Mouse için hover efekti */
+        @media (hover: hover) {
+            .spotify-button:hover {
+                background-color: #1ed760;
+                transform: scale(1.03);
+            }
         }
-        #start-button {
-            max-width: 400px; /* Yeni */
-            width: 100%; /* Yeni */
-            display: block; /* Yeni */
-            margin-left: auto; /* Yeni */
-            margin-right: auto; /* Yeni */
-            box-sizing: border-box; /* Yeni */
-            padding: 18px; /* Değişti (20'den) */
-            font-size: 1.1rem; /* Değişti (1.2'den) */
-            font-weight: 700;
-            background-color: #1DB954;
-            color: #ffffff;
-            border: none;
-            border-radius: 50px;
-            cursor: pointer;
-            transition: all 0.2s ease;
-            letter-spacing: 0.5px;
-        }
-        #start-button:hover {
+        /* Mobil/Dokunmatik için anlık :active efekti */
+        .spotify-button:active {
             background-color: #1ed760;
             transform: scale(1.03);
         }
-        /* GÜNCELLEME SONU */
+
+        .spotify-button:disabled {
+            background-color: #535353;
+            color: #aaa;
+            cursor: not-allowed;
+            transform: none;
+        }
 
         /* Test Ekranı (Başlangıçta Gizli) */
         #test-container {
             display: none;
             padding: 30px 40px;
         }
+        
+        /* Final Ekranı Stilleri */
+        #finale-container {
+            display: none;
+            padding: 40px;
+            text-align: center;
+        }
+        #finale-container h2 {
+            font-size: 2rem;
+            color: #1DB954;
+        }
+        #finale-container p {
+            font-size: 1.2rem; 
+            line-height: 1.7;
+            color: #b3b3b3;
+            margin-bottom: 30px;
+        }
+
+        /* Sonuç Ekranı (Başlangıçta Gizli) */
         #results-container {
             display: none;
             padding: 30px 40px;
         }
-        h1, h2 {
-            text-align: center;
-            color: #ffffff;
-        }
+        
+        h1, h2 { text-align: center; color: #ffffff; }
         h1 { font-size: 2rem; margin-bottom: 10px; }
         h2.eliminated { color: #e74c3c; }
         #section-title {
@@ -114,12 +122,36 @@
         .choice-button {
             width: 100%; padding: 20px; font-size: 1rem; font-weight: 500;
             background-color: #2a2a2a; border: 2px solid #535353; color: #ffffff;
-            border-radius: 8px; cursor: pointer; transition: all 0.2s ease;
+            border-radius: 8px; cursor: pointer; transition: background-color 0.2s ease, border-color 0.2s ease; /* yumuşak geçiş */
             line-height: 1.5; text-align: left;
         }
-        .choice-button:hover { background-color: #1DB954; color: #ffffff; border-color: #1DB954; }
-        .choice-button span { font-weight: 700; color: #1DB954; margin-right: 8px; }
-        .choice-button:hover span { color: #ffffff; }
+        
+        /* --- MOBİL İÇİN DOKUNMA/HOVER DÜZELTMESİ BURADA --- */
+        /* Sadece anlık basma efekti (Mobil + PC) */
+        .choice-button:active {
+            background-color: #1DB954; 
+            color: #ffffff; 
+            border-color: #1DB954; 
+        }
+        .choice-button:active span {
+            color: #ffffff;
+        }
+
+        /* Sadece mouse olan cihazlar için :hover (Telefonlarda takılı kalmayı engeller) */
+        @media (hover: hover) {
+            .choice-button:hover { 
+                background-color: #1DB954; 
+                color: #ffffff; 
+                border-color: #1DB954; 
+            }
+            .choice-button:hover span { 
+                color: #ffffff; 
+            }
+        }
+        /* --- DÜZELTME SONU --- */
+
+        .choice-button span { font-weight: 700; color: #1DB954; margin-right: 8px; transition: color 0.2s ease; }
+        
         #navigation-container {
             display: flex; justify-content: space-between; align-items: center;
             margin-top: 30px;
@@ -180,7 +212,7 @@
             </p>
             <input type="text" id="name-input" placeholder="İsminiz (Opsiyonel)">
             <br>
-            <button id="start-button">TESTE BAŞLA</button>
+            <button id="start-button" class="spotify-button">TESTE BAŞLA</button>
         </div>
 
         <div id="test-container">
@@ -200,6 +232,13 @@
             </div>
             <div id="progress-text" id="progress-text">Soru 1 / 140</div>
         </div>
+
+        <div id="finale-container">
+            <h2>Testi tamamladın!</h2>
+            <p>Sonuçlarını görmek için heyecanlı mısın?</p>
+            <button id="show-and-save-button" class="spotify-button">Evet</button>
+        </div>
+
 
         <div id="results-container">
             <div class="results-header">
@@ -250,7 +289,7 @@
 
     <script>
         // ========================================================================
-        // GEMINI TARAFINDAN KALİBRE EDİLMİŞ 140 SORULUK TAM PUANLAMA ANAHTARI
+        // TAMAMEN YENİDEN KALİBRE EDİLMİŞ 140 SORULUK TAM PUANLAMA ANAHTARI
         // ========================================================================
         const questions = [
             {
@@ -259,30 +298,30 @@
                     { a: "İçimde sürekli daha iyi olma ve standartları yükseltme isteği vardır.", b: "Hayatı ve olayları kendi doğal akışına bırakmayı tercih ederim.", key_a: "T1", key_b: "T9" },
                     { a: "Başkalarının bana ihtiyaç duyması ve onlara destek olmak beni motive eder.", b: "Kendi başıma yetebilmek ve kimseden beklenti olmadan özgür hissetmek isterim.", key_a: "T2", key_b: "T5" },
                     { a: "Hedeflerime ulaştığımda ve başarılı olduğumda değerli hissederim.", b: "Duygusal olarak samimi ve özgün olduğumda değerli hissederim.", key_a: "T3", key_b: "T4" },
-                    { a: "Kendimi farklı, özgün ve 'özel' hissetmek isterim.", b: "Uyumlu, huzurlu ve 'sıradan' bir yaşamın parçası olmayı tercih ederim.", key_a: "T4", key_b: "T9" },
+                    { a: "Kendi özgün kimliğimi ve duygusal derinliğimi ifade etmek benim için önceliklidir.", b: "İçsel huzurumu korumak ve çevremle uyum içinde olmak benim için önceliklidir.", key_a: "T4", key_b: "T9" }, // Düzeltildi (4)
                     { a: "İnsanları ve durumları anlamak için önce mesafeli durup gözlemlerim.", b: "İnsanları ve durumları anlamak için onlarla doğrudan etkileşime girerim.", key_a: "T5", key_b: "T2" },
                     { a: "Hayatta belirsizlikleri azaltmak için bir planım ve stratejim olmalı.", b: "Yeni olasılıklara açık olmak için planların kısıtlayıcı olmamasını tercih ederim.", key_a: "T6", key_b: "T7" },
                     { a: "Zihnim sürekli yeni fikirler, projeler ve olasılıklarla dolar.", b: "Zihnim ilgimi çeken bir konuyu derinlemesine incelemeye odaklanır.", key_a: "T7", key_b: "T5" },
-                    { a: "Zor durumlarda güçlü ve kararlı görünmek benim için önemlidir.", b: "Duygusal olarak dürüst ve savunmasız olabilmek benim için güçtür.", key_a: "T8", key_b: "T4" },
+                    { a: "Zor durumlarda kontrolü elime almayı ve iddialı bir duruş sergilemeyi tercih ederim.", b: "Zor durumlarda ne hissettiğimi dürüstçe anlamayı ve duygularımı ifade etmeyi tercih ederim.", key_a: "T8", key_b: "T4" }, // Düzeltildi (8)
                     { a: "Ortamdaki huzuru korumak için çatışmadan kaçınırım.", b: "Gelişim ve netlik için çatışmanın gerekli olduğuna inanırım.", key_a: "T9", key_b: "T8" },
-                    { a: "Hata yapmaktan veya 'yanlış' davranmaktan şiddetle çekinirim.", b: "Hataları, öğrenme sürecinin doğal ve yol gösterici bir parçası olarak görürüm.", key_a: "T1", key_b: "T7" },
+                    { a: "Hata yapmaktan veya yanlış davranmaktan şiddetle çekinirim.", b: "Hataları, öğrenme sürecinin doğal ve yol gösterici bir parçası olarak görürüm.", key_a: "T1", key_b: "T7" }, // Tırnak kaldırıldı (10)
                     { a: "İnsanların bana güvenmesi ve sadakatimi bilmesi benim için kritiktir.", b: "Başkalarının onayına ihtiyaç duymadan kendi yolumu çizmeyi seçerim.", key_a: "T6", key_b: "T8" },
                     { a: "Duygularımın yoğunluğunu hisseder ve bu derinliğe değer veririm.", b: "Duygularımı mantık ve prensiplerimle kontrol altında tutmaya çalışırım.", key_a: "T4", key_b: "T1" },
-                    { a: "Yaptığım her şeyin net bir amacı ve 'doğru' bir yolu olmalı.", b: "Her şeyin derin bir anlamı olmak zorunda değil, bazen sadece deneyim vardır.", key_a: "T1", key_b: "T9" },
-                    { a: "Üretken ve 'işe yarar' hissetmediğimde kendimi huzursuz hissederim.", b: "Bir şey 'yapmasam' veya 'başarmasam' bile değerli olduğumu bilirim.", key_a: "T3", key_b: "T9" },
+                    { a: "Yaptığım her şeyin net bir amacı ve doğru bir yolu olmalı.", b: "Her şeyin derin bir anlamı olmak zorunda değil, bazen sadece deneyim vardır.", key_a: "T1", key_b: "T9" },
+                    { a: "Üretken ve işe yarar hissetmediğimde kendimi huzursuz hissederim.", b: "Bir şey yapmasam veya başarmasam bile değerli olduğumu bilirim.", key_a: "T3", key_b: "T9" }, // Tırnak kaldırıldı (14)
                     { a: "Başkalarına yardım etmeyi ve ihtiyaçlarını karşılamayı görevim gibi hissederim.", b: "Enerjimi korumak için önce kendi sınırlarımı korumam gerektiğini bilirim.", key_a: "T2", key_b: "T5" },
-                    { a: "Bir işe başlarsam, onu kusursuz ve en iyi standartta yapmalıyım.", b: "Bir işi 'yeterince iyi' yapmak da kabul edilebilirdir, mükemmel olması şart değil.", key_a: "T1", key_b: "T9" },
+                    { a: "Bir işe başlarsam, onu kusursuz ve en iyi standartta yapmalıyım.", b: "Bir işi yeterince iyi yapmak da kabul edilebilirdir, mükemmel olması şart değil.", key_a: "T1", key_b: "T9" }, // Tırnak kaldırıldı (16)
                     { a: "Kararlarımı verilere ve mantıksal analizlere dayandırırım.", b: "Kararlarımda sezgilerimin ve içimden gelen sesin önemli bir payı vardır.", key_a: "T5", key_b: "T4" },
                     { a: "Yeni deneyimler ve riskler almak bana heyecan ve enerji verir.", b: "Bildiğim ve güvende olduğum alanlarda kalmak bana huzur verir.", key_a: "T7", key_b: "T6" },
                     { a: "Genellikle kontrolün bende olmasını ve durumu yönetmeyi isterim.", b: "Bazen kontrolü bırakmanın ve akışa güvenmenin daha huzurlu olduğunu düşünürüm.", key_a: "T8", key_b: "T9" },
                     { a: "Başkalarının duygusal ihtiyaçlarına karşı çok duyarlıyımdır.", b: "Duygusal durumlara karşı daha mesafeli ve objektif kalırım.", key_a: "T2", key_b: "T5" },
                     { a: "Gelecekteki yeni olasılıklar ve planlar beni mevcut durumdan daha çok büyüler.", b: "Mevcut anın veya konunun derinliğini keşfetmek beni daha çok tatmin eder.", key_a: "T7", key_b: "T4" },
                     { a: "Yapılandırılmış ve düzenli bir ortamda kendimi daha üretken hissederim.", b: "Esnek ve kuralları az olan bir ortamda kendimi daha yaratıcı hissederim.", key_a: "T1", key_b: "T7" },
-                    { a: "Konuların net bir 'doğrusu' ve 'yanlışı' olduğuna inanırım.", b: "Doğru ve yanlışın, bakış açısına ve duruma göre değişebileceğine inanırım.", key_a: "T1", key_b: "T9" },
-                    { a: "İnsanlarla derin duygusal bağlar kurduğumda enerji kazanarım.", b: "Kendi düşüncelerimle yalnız kaldığımda enerjimi yeniden toplarım.", key_a: "T2", key_b: "T5" },
+                    { a: "Evrensel doğrulara ve prensiplere dayalı net bir yapıya inanırım.", b: "Her durumun kendine özgü koşulları olduğuna ve farklı bakış açılarını anlamanın önemli olduğuna inanırım.", key_a: "T1", key_b: "T9" }, // Düzeltildi (23)
+                    { a: "İnsanlarla derin duygusal bağlar kurduğumda enerji kazanırım.", b: "Kendi düşüncelerimle yalnız kaldığımda enerjimi yeniden toplarım.", key_a: "T2", key_b: "T5" },
                     { a: "Duygularımı dürüstçe göstermenin bir zayıflık olmadığını düşünürüm.", b: "Duygularımı göstermenin beni gereksiz yere savunmasız yapacağını düşünürüm.", key_a: "T4", key_b: "T8" },
                     { a: "Hayat, üstesinden gelinmesi gereken zorluklar ve mücadeleler bütünüdür.", b: "Hayat, keyif alınması ve keşfedilmesi gereken bir deneyimler bütünüdür.", key_a: "T8", key_b: "T7" },
-                    { a: "Başarılarım ve yetkinliğimle ciddiye alınmak isterim.", b: "Özgünlüğüm ve 'olduğum halimle' kabul edilmek isterim.", key_a: "T3", key_b: "T4" },
+                    { a: "Başarılarım ve yetkinliğimle ciddiye alınmak isterim.", b: "Özgünlüğüm ve olduğum halimle kabul edilmek isterim.", key_a: "T3", key_b: "T4" }, // Tırnak kaldırıldı (27)
                     { a: "Net hedefler koymadan motive olmakta zorlanırım.", b: "Hedef olmasa bile, akışta kalarak da üretken ve motive olabilirim.", key_a: "T3", key_b: "T9" },
                     { a: "İnsanlara güvenmeden önce onları uzun süre gözlemler ve analiz ederim.", b: "İnsanlara genelde güvenirim; aksi kanıtlanırsa dersimi alırım.", key_a: "T6", key_b: "T2" },
                     { a: "Ani ve plansız değişiklikler beni kaygılandırır.", b: "Ani ve plansız değişiklikler beni canlandırır ve heyecanlandırır.", key_a: "T6", key_b: "T7" }
@@ -293,67 +332,67 @@
                 items: [
                     { a: "Eleştirildiğimde, pozisyonumu veya doğrularımı savunmaya geçerim.", b: "Eleştirildiğimde, önce karşı tarafın bakış açısını anlamaya çalışırım.", key_a: "T1", key_b: "T9" },
                     { a: "Kırgınlığımı, uyumu bozmamak için içimde tutarım.", b: "Kırgınlığımı, anlaşılmak için açıkça belli ederim.", key_a: "T9", key_b: "T4" },
-                    { a: "Bir şeyin 'yanlış' yapılmasından veya etik dışı olmasından korkarım.", b: "Bir şeyin potansiyelini 'denememekten' veya 'kaçırmaktan' korkarım.", key_a: "T1", key_b: "T7" },
+                    { a: "Bir şeyin yanlış yapılmasından veya etik dışı olmasından endişe duyarım.", b: "Bir şeyin potansiyelini denememekten veya kaçırmaktan endişe duyarım.", key_a: "T1", key_b: "T7" }, // Düzeltildi (33)
                     { a: "Yoğun duygular hissettiğimde, onları anlamak için analiz ederim.", b: "Yoğun duygular hissettiğimde, onların akmasına ve deneyimlenmesine izin veririm.", key_a: "T5", key_b: "T4" },
-                    { a: "Bir sorun ortaya çıktığında, verimlilik adına hemen çözmek isterim.", b: "Bir sorun ortaya çıktığında, bazen en iyi çözümün 'zaman bırakmak' olduğunu düşünürüm.", key_a: "T3", key_b: "T9" },
+                    { a: "Bir sorun ortaya çıktığında, verimlilik adına hemen çözmek isterim.", b: "Bir sorun ortaya çıktığında, bazen en iyi çözümün zaman bırakmak olduğunu düşünürüm.", key_a: "T3", key_b: "T9" },
                     { a: "Birinden duygusal mesafe hissedersem, reddedilmemek için ben de çekilirim.", b: "Birinden duygusal mesafe hissedersem, nedenini anlamak için üzerine giderim.", key_a: "T2", key_b: "T8" },
                     { a: "Duygusal olarak incindiğimde sakinleşmem ve affetmem zaman alır.", b: "Çabuk parlasam da, öfkem veya kırgınlığım çabuk geçer, kin tutmam.", key_a: "T4", key_b: "T7" },
                     { a: "Başkalarının ne hissettiğini kolayca anlar ve empati yaparım.", b: "Başkalarının ne hissettiğini fark etsem de, mantıklı ve mesafeli kalmayı tercih ederim.", key_a: "T2", key_b: "T5" },
-                    { a: "Yaptığım hatalar zihnimde uzun süre döner, 'keşke' derim.", b: "Hatalardan dersimi alır ve hızla önüme bakmaya çalışırım.", key_a: "T1", key_b: "T7" },
+                    { a: "Yaptığım hatalar zihnimde uzun süre döner, keşke derim.", b: "Hatalardan dersimi alır ve hızla önüme bakmaya çalışırım.", key_a: "T1", key_b: "T7" },
                     { a: "Endişelendiğimde, en kötü senaryolara karşı B, C, D planları yaparım.", b: "Endişelendiğimde, dikkatimi daha keyifli ve olumlu şeylere yönlendiririm.", key_a: "T6", key_b: "T7" },
-                    { a: "Korkularımı ve endişelerimi başkalarına pek belli etmem, güçlü dururum.", b: "Korkularımı ve endişelerimi güvendiğim insanlarla paylaşarak destek ararım.", key_a: "T8", key_b: "T6" },
-                    { a: "Sevdiğim biri benden uzaklaşırsa, 'ben ne yaptım' diye suçluluk duyarım.", b: "Sevdiğim biri benden uzaklaşırsa, onun kararıdır der, kendi alanıma çekilirim.", key_a: "T2", key_b: "T5" },
+                    { a: "Zorluklarla yüzleşirken, içsel gücüme odaklanır ve savunmasızlığımı göstermem.", b: "Zorluklarla yüzleşirken, güvendiğim insanlarla fikir alışverişi yaparak kaygılarımı netleştiririm.", key_a: "T8", key_b: "T6" }, // Düzeltildi (41)
+                    { a: "Sevdiğim biri benden uzaklaşırsa, ben ne yaptım diye suçluluk duyarım.", b: "Sevdiğim biri benden uzaklaşırsa, onun kararıdır der, kendi alanıma çekilirim.", key_a: "T2", key_b: "T5" },
                     { a: "Dışarıdan gelen onayı hissetmek beni motive eder.", b: "Kendi içsel standartlarıma uymak bana yeterlidir.", key_a: "T3", key_b: "T1" },
                     { a: "Süreçlerin ve kararların benim kontrolümde olmasını tercih ederim.", b: "Akışa uymayı ve yönlendirmeyi başkalarına bırakmayı tercih ederim.", key_a: "T8", key_b: "T9" },
                     { a: "Çatışma anında, ortamı sakinleştirmek ve uyumu korumak için arabulucu olurum.", b: "Çatışma anında, gerçeği ortaya çıkarmak ve netlik kazanmak için konunun üzerine giderim.", key_a: "T9", key_b: "T8" },
-                    { a: "Uzun süren sessizlik ve eylemsizlik beni huzursuz eder, bir 'olay' ararım.", b: "Uzun süren sessizlik ve yalnızlık bana huzur verir ve enerjimi yeniler.", key_a: "T7", key_b: "T5" },
+                    { a: "Uzun süren sessizlik ve eylemsizlik beni huzursuz eder, bir olay ararım.", b: "Uzun süren sessizlik ve yalnızlık bana huzur verir ve enerjimi yeniler.", key_a: "T7", key_b: "T5" },
                     { a: "Üzüntü veya melankoli hissettiğimde, bu duyguyu dışa yansıtma eğilimindeyim.", b: "Üzüntü veya melankoli hissettiğimde, bunu kendi içimde yalnız yaşamayı tercih ederim.", key_a: "T4", key_b: "T5" },
-                    { a: "Bir ilişkide 'ben' diyememekten, kimliğimi kaybetmekten korkarım.", b: "Bir ilişkide 'biz' olamamaktan, derin bir bağ kuramamaktan korkarım.", key_a: "T4", key_b: "T2" },
+                    { a: "Bir ilişkide ben diyememekten, kimliğimi kaybetmekten korkarım.", b: "Bir ilişkide biz olamamaktan, derin bir bağ kuramamaktan korkarım.", key_a: "T4", key_b: "T2" },
                     { a: "Kendimi sürekli daha iyiye doğru zorlarım ve yüksek hedefler koyarım.", b: "Kendi içsel huzurumu ve mevcut ritmimi korumayı daha çok önemserim.", key_a: "T1", key_b: "T9" },
                     { a: "Baskı altında, inisiyatif alıp sorumluluğu üstlenirim.", b: "Baskı altında, durumu analiz etmek için bir adım geri çekilir ve gözlem yaparım.", key_a: "T8", key_b: "T5" },
-                    { a: "İnsanların bana 'ihtiyaç' duymasını isterim, bu beni değerli hissettirir.", b: "Kimsenin bana 'ihtiyaç' duymaması bana özgürlük ve huzur verir.", key_a: "T2", key_b: "T5" },
+                    { a: "İnsanların bana ihtiyaç duymasını isterim, bu beni değerli hissettirir.", b: "Kimsenin bana ihtiyaç duymaması bana özgürlük ve huzur verir.", key_a: "T2", key_b: "T5" },
                     { a: "Gerilimi yükseldiğinde, ortamı yumuşatmak için şaka yapar veya konuyu dağıtırım.", b: "Gerilim yükseldiğinde, sorunu ciddiyetle ele alıp yapısal bir çözüm ararım.", key_a: "T7", key_b: "T1" },
                     { a: "Zorlayıcı duygulardan kaçmak için zihnimi meşgul etmeyi tercih ederim.", b: "Zorlayıcı duyguların içine girmeyi ve onları anlamlandırmayı tercih ederim.", key_a: "T7", key_b: "T4" },
-                    { a: "Birine tam güvenmeden önce, onu küçük senaryolarla 'test' ederim.", b: "Birine güvenirsem, onu test etmem, sadece dinler ve anlamaya çalışırım.", key_a: "T6", key_b: "T9" },
+                    { a: "Birine tam güvenmeden önce, onu küçük senaryolarla test ederim.", b: "Birine güvenirsem, onu test etmem, sadece dinler ve anlamaya çalışırım.", key_a: "T6", key_b: "T9" }, // Tırnak kaldırıldı (54)
                     { a: "Duygularımın yoğunluğu bazen mantığımın önüne geçer.", b: "Duygularım ne kadar yoğun olursa olsun, mantığımı önde tutmaya çalışırım.", key_a: "T4", key_b: "T1" },
                     { a: "Bir hata yaptığımda, başkalarının gözündeki imajım için utanırım.", b: "Bir hata yaptığımda, kendi prensiplerime uymadığım için suçluluk duyarım.", key_a: "T3", key_b: "T1" },
                     { a: "Stres altında tepkilerim genellikle dışa dönük ve agresif olabilir.", b: "Stres altında tepkilerim genellikle içe dönük ve mesafeli olabilir.", key_a: "T8", key_b: "T5" },
                     { a: "Güçlü ve kararlı görünmek bana güven verir.", b: "Sevecen ve ulaşılabilir görünmek bana güven verir.", key_a: "T8", key_b: "T2" },
-                    { a: "Anlaşılmamak bende derin bir hayal kırıklığı ve 'eksiklik' hissi yaratır.", b: "Anlaşılmamak doğaldır, herkesin beni anlamasını beklemem.", key_a: "T4", key_b: "T9" },
-                    { a: "Dışsal olayları veya başkalarını kontrol edememekten korkarım.", b: "Kendi içsel dürtülerimi veya 'yanlış' yapma isteğimi kontrol edememekten korkarım.", key_a: "T8", key_b: "T1" }
+                    { a: "Anlaşılmamak bende derin bir hayal kırıklığı ve eksiklik hissi yaratır.", b: "Anlaşılmamak doğaldır, herkesin beni anlamasını beklemem.", key_a: "T4", key_b: "T9" }, // Tırnak kaldırıldı (59)
+                    { a: "Dışsal olayları veya başkalarını kontrol edememekten endişe duyarım.", b: "Kendi içsel dürtülerimi veya yanlış yapma isteğimi kontrol edememekten endişe duyarım.", key_a: "T8", key_b: "T1" } // Düzeltildi (60)
                 ]
             },
             {
                 section: "Bölüm 3 — Motivasyon & Korkular",
                 items: [
-                    { a: "Temel motivasyonum dünyayı 'düzeltmek' ve 'iyileştirmektir'.", b: "Temel motivasyonum dünyayı 'anlamak' ve 'kavramaktır'.", key_a: "T1", key_b: "T5" },
+                    { a: "Temel motivasyonum dünyayı düzeltmek ve iyileştirmektir.", b: "Temel motivasyonum dünyayı anlamak ve kavramaktır.", key_a: "T1", key_b: "T5" },
                     { a: "Sevilmek için başkalarının ihtiyaçlarına odaklanır ve fedakârlık yaparım.", b: "Sevildiğimden emin olsam bile, uyumu korumak için kendi isteklerimi ertelerim.", key_a: "T2", key_b: "T9" },
-                    { a: "En büyük korkum 'değersiz' veya 'başarısız' olmaktır.", b: "En büyük korkum 'sıradan' veya 'anlamsız' olmaktır.", key_a: "T3", key_b: "T4" },
-                    { a: "Kendimi 'özel' ve 'farklı' hissetmezsem hayat anlamsızlaşır.", b: "Başkalarıyla 'uyum' ve 'bütünlük' hissetmezsem hayat anlamsızlaşır.", key_a: "T4", key_b: "T9" },
+                    { a: "En büyük korkum değersiz veya başarısız olmaktır.", b: "En büyük korkum sıradan veya anlamsız olmaktır.", key_a: "T3", key_b: "T4" },
+                    { a: "Kendimi özel ve farklı hissetmezsem hayat anlamsızlaşır.", b: "Başkalarıyla uyum ve bütünlük hissetmezsem hayat anlamsızlaşır.", key_a: "T4", key_b: "T9" },
                     { a: "Bilinmeyen ve belirsiz durumlar beni yetersiz hissettirir ve rahatsız eder.", b: "Bilinmeyen ve belirsiz durumlar bana keşif için ilham ve heyecan verebilir.", key_a: "T5", key_b: "T7" },
-                    { a: "En çok korktuğum şey güvendiğim insanlar tarafından 'ihanete' uğramaktır.", b: "En çok korktuğum şey sevdiklerim tarafından 'istenmemek' veya 'unutulmaktır'.", key_a: "T6", key_b: "T2" },
+                    { a: "En çok korktuğum şey güvendiğim insanlar tarafından ihanete uğramaktır.", b: "En çok korktuğum şey sevdiklerim tarafından istenmemek veya unutulmaktır.", key_a: "T6", key_b: "T2" },
                     { a: "Olumsuz duygulardan ve acıdan kaçmak için dikkatimi keyifli şeylere yönlendiririm.", b: "Olumsuz duyguları ve acıyı, anlamlı oldukları için hissetmenin değerli olduğuna inanırım.", key_a: "T7", key_b: "T4" },
-                    { a: "En büyük korkum 'zayıf' görünmek veya 'kontrol edilmektir'.", b: "En büyük korkum 'sevilmeyen' veya 'itici' görünmektir.", key_a: "T8", key_b: "T2" },
-                    { a: "Benim için 'içsel huzur' ve 'barış' en değerli olandır.", b: "Benim için 'doğruluk' ve 'adalet', mevcut huzurdan daha önemlidir.", key_a: "T9", key_b: "T1" },
-                    { a: "Sürekli olarak 'kusursuz' olmanın peşindeyim.", b: "Sürekli olarak 'güvende' olmanın peşindeyim.", key_a: "T1", key_b: "T6" },
-                    { a: "Yaptığım yardımların ve fedakarlıkların 'görülmesini' ve 'takdir edilmesini' isterim.", b: "Yaptıklarımın görülmesinden çok, 'özgür' ve 'kısıtlanmamış' olmayı isterim.", key_a: "T2", key_b: "T7" },
-                    { a: "İnsanların gözünde 'başarılı' görünmek isterim.", b: "İnsanların gözünde 'tutarlı' ve 'güvenilir' görünmek isterim.", key_a: "T3", key_b: "T6" },
+                    { a: "En büyük korkum zayıf görünmek veya kontrol edilmektir.", b: "En büyük korkum sevilmeyen veya itici görünmektir.", key_a: "T8", key_b: "T2" },
+                    { a: "Benim için içsel huzur ve barış en değerli olandır.", b: "Benim için doğruluk ve adalet, mevcut huzurdan daha önemlidir.", key_a: "T9", key_b: "T1" },
+                    { a: "Sürekli olarak kusursuz olmanın peşindeyim.", b: "Sürekli olarak güvende olmanın peşindeyim.", key_a: "T1", key_b: "T6" },
+                    { a: "Yaptığım yardımların ve fedakarlıkların görülmesini ve takdir edilmesini isterim.", b: "Yaptıklarımın görülmesinden çok, özgür ve kısıtlanmamış olmayı isterim.", key_a: "T2", key_b: "T7" },
+                    { a: "İnsanların gözünde başarılı görünmek isterim.", b: "İnsanların gözünde tutarlı ve güvenilir görünmek isterim.", key_a: "T3", key_b: "T6" },
                     { a: "Farklılığım ve özgünlüğümle öne çıkmak isterim.", b: "Sadakatim ve güvenilirliğimle öne çıkmak isterim.", key_a: "T4", key_b: "T6" },
                     { a: "Bilgi ve uzmanlık bana güven verir.", b: "Kararlılık ve eylem gücü bana güven verir.", key_a: "T5", key_b: "T8" },
-                    { a: "Her şeyin bir düzen içinde ve 'olması gerektiği gibi' kontrolümde olmasını isterim.", b: "Her şeyin 'tam kontrolümde' olması şart değil, esneklik de önemlidir.", key_a: "T1", key_b: "T9" },
-                    { a: "Güvenmek zordur, o yüzden hep bir 'B planım' vardır.", b: "Hayata güvenirim, genelde 'B planına' ihtiyaç duymam, anı yaşarım.", key_a: "T6", key_b: "T7" },
-                    { a: "Hayattaki temel amacım 'keyif' ve 'yeni deneyimler'dir.", b: "Hayattaki temel amacım 'anlam' ve 'duygusal derinlik'tir.", key_a: "T7", key_b: "T4" },
-                    { a: "Ne pahasına olursa olsun 'zayıf' veya 'savunmasız' görünmemeliyim.", b: "Ne pahasına olursa olsun 'duygusuz' veya 'kalpsiz' görünmemeliyim.", key_a: "T8", key_b: "T2" },
+                    { a: "Her şeyin bir düzen içinde ve olması gerektiği gibi kontrolümde olmasını isterim.", b: "Her şeyin tam kontrolümde olması şart değil, esneklik de önemlidir.", key_a: "T1", key_b: "T9" },
+                    { a: "Güvenmek zordur, o yüzden hep bir B planım vardır.", b: "Hayata güvenirim, genelde B planına ihtiyaç duymam, anı yaşarım.", key_a: "T6", key_b: "T7" },
+                    { a: "Hayattaki temel amacım keyif ve yeni deneyimlerdir.", b: "Hayattaki temel amacım anlam ve duygusal derinliktir.", key_a: "T7", key_b: "T4" },
+                    { a: "Ne pahasına olursa olsun zayıf veya savunmasız görünmemeliyim.", b: "Ne pahasına olursa olsun duygusuz veya kalpsiz görünmemeliyim.", key_a: "T8", key_b: "T2" },
                     { a: "Huzurumu korumak için çatışmadan kaçınmak en iyi yoldur.", b: "Gerçeği savunmak için çatışmaya girmek, huzuru bozmaya değer.", key_a: "T9", key_b: "T8" },
-                    { a: "Kendi 'doğru' standartlarıma uymayınca içsel huzurum bozulur.", b: "Kendi 'özgün' kimliğime ihanet edince içsel huzurum bozulur.", key_a: "T1", key_b: "T4" },
-                    { a: "Sevilmezsem ve ihtiyaç duyulmazsam kendimi 'değersiz' hissederim.", b: "Anlaşılmazsam ve 'sıradan' görülürsem kendimi 'değersiz' hissederim.", key_a: "T2", key_b: "T4" },
+                    { a: "Kendi doğru standartlarıma uymayınca içsel huzurum bozulur.", b: "Kendi özgün kimliğime ihanet edince içsel huzurum bozulur.", key_a: "T1", key_b: "T4" },
+                    { a: "Sevilmezsem ve ihtiyaç duyulmazsam kendimi değersiz hissederim.", b: "Anlaşılmazsam ve sıradan görülürsem kendimi değersiz hissederim.", key_a: "T2", key_b: "T4" },
                     { a: "Başarısızlık, imajımın zedelenmesi demektir ve bundan utanırım.", b: "Başarısızlık, deneyimin bir parçasıdır ve beni kısıtlamaz.", key_a: "T3", key_b: "T7" },
                     { a: "Hayal gücüm ve iç dünyam, dış dünyadaki gerçeklerden daha zengindir.", b: "Dış dünyadaki somut gerçekler ve prensipler, hayal gücünden daha önemlidir.", key_a: "T4", key_b: "T1" },
-                    { a: "Yalnız kalmak ve düşünmek bana huzur ve netlik verir.", b: "Yalnız kalmak bana 'dışarıda kalmışlık' hissi verir ve ürkütür.", key_a: "T5", key_b: "T2" },
+                    { a: "Yalnız kalmak ve düşünmek bana huzur ve netlik verir.", b: "Yalnız kalmak bana dışarıda kalmışlık hissi verir ve ürkütür.", key_a: "T5", key_b: "T2" },
                     { a: "Korkularımı ve endişelerimi detaylıca analiz eder, onlara hazırlıklı olurum.", b: "Korkularımın ve endişelerimin üzerine gider, onlarla yüzleşirim.", key_a: "T6", key_b: "T8" },
                     { a: "Hayatın amacı olabildiğince keyif almak ve acıdan kaçmaktır.", b: "Hayatın amacı bir anlam bulmak ve doğru olanı yapmaktır.", key_a: "T7", key_b: "T1" },
                     { a: "Çevremdeki düzensizlikten ve hatalardan kendimi sorumlu hissederim.", b: "Çevremdeki her şeyden sorumlu değilim, herkes kendi sorumluluğunu almalı.", key_a: "T1", key_b: "T9" },
-                    { a: "Ortamlarda genellikle 'yönlendiren' ve 'karar veren' rolünü alırım.", b: "Ortamlarda genellikle 'destekleyen' ve 'empati kuran' rolünü alırım.", key_a: "T8", key_b: "T2" },
+                    { a: "Ortamlarda genellikle yönlendiren ve karar veren rolünü alırım.", b: "Ortamlarda genellikle destekleyen ve empati kuran rolünü alırım.", key_a: "T8", key_b: "T2" },
                     { a: "Sükunet ve içsel denge, gerçeği savunmaktan daha önemlidir.", b: "Gerçeği savunmak ve adil olmak, sükuneti bozmaya değer.", key_a: "T9", key_b: "T1" },
                     { a: "Yapılandırılmış ve düzenli bir hayat bana huzur verir.", b: "Spontane ve akışta olan bir hayat bana huzur verir.", key_a: "T1", key_b: "T7" }
                 ]
@@ -368,29 +407,29 @@
                     { a: "Bir ortama girdiğimde, dikkatleri üzerime çekmeyi ve öne çıkmayı severim.", b: "Bir ortama girdiğimde, arka planda kalıp gözlem yapmayı tercih ederim.", key_a: "T3", key_b: "T5" },
                     { a: "Yeni insanlarla tanışmak ve farklı çevrelerde bulunmak bana enerji verir.", b: "Az sayıda ama derin bağ kurduğum insanlarla vakit geçirmeyi tercih ederim.", key_a: "T7", key_b: "T4" },
                     { a: "Kendi özel alanımı ve sınırlarımı korumak konusunda çok hassasımdır.", b: "Yakınlık kurmak için sınırlarımı esnetmeyi ve alanımı paylaşmayı severim.", key_a: "T5", key_b: "T2" },
-                    { a: "Yeni ortamlara kolayca uyum sağlar ve hızlıca kaynaşırım.", b: "Yeni ortamlara alışmam ve insanlara 'ısınmam' zaman alır.", key_a: "T7", key_b: "T5" },
+                    { a: "Yeni ortamlara kolayca uyum sağlar ve hızlıca kaynaşırım.", b: "Yeni ortamlara alışmam ve insanlara ısınmam zaman alır.", key_a: "T7", key_b: "T5" },
                     { a: "Fiziksel güç ve kararlılık, ilişkilerde önemli bir yer tutar.", b: "Duygusal empati ve şefkat, ilişkilerde önemli bir yer tutar.", key_a: "T8", key_b: "T2" },
                     { a: "Grup içinde genellikle kararları veren ve yönlendiren ben olurum.", b: "Grup içinde genellikle uyumu sağlayan ve akışa uyan ben olurum.", key_a: "T8", key_b: "T9" },
                     { a: "Rekabetçi ortamlar beni motive eder ve en iyimi ortaya çıkarır.", b: "Rekabetçi ortamlar beni gerer ve içsel huzurumu bozar.", key_a: "T3", key_b: "T9" },
-                    { a: "Yaptığım işle 'tanınmak' ve 'beğenilmek' isterim.", b: "Yaptığım işle 'tanınmasam' bile 'yetkin' ve 'bilgili' olmayı tercih ederim.", key_a: "T3", key_b: "T5" },
+                    { a: "Yaptığım işle tanınmak ve beğenilmek isterim.", b: "Yaptığım işle tanınmasam bile yetkin ve bilgili olmayı tercih ederim.", key_a: "T3", key_b: "T5" },
                     { a: "Genel olarak hayata ve insanlara iyimser yaklaşırım, güvenmek kolaydır.", b: "Hayata ve insanlara karşı temkinliyimdir, güvenmem zaman alır.", key_a: "T7", key_b: "T6" },
-                    { a: "Başarılarımla 'hayranlık' duyulması hoşuma gider.", b: "Kimliğimle 'derinlemesine anlaşılmak' hoşuma gider.", key_a: "T3", key_b: "T4" },
+                    { a: "Başarılarımla hayranlık duyulması hoşuma gider.", b: "Kimliğimle derinlemesine anlaşılmak hoşuma gider.", key_a: "T3", key_b: "T4" },
                     { a: "Ortamlarda dikkat çekmeyi ve enerjiyi yükseltmeyi severim.", b: "Ortamlarda huzuru korumayı ve arka planda kalmayı tercih ederim.", key_a: "T7", key_b: "T9" },
                     { a: "Ait olduğum topluluğa veya gruba karşı güçlü bir sadakat hissederim.", b: "Kendi bireyselliğimi ve özgünlüğümü korumak, grup aidiyetinden önce gelir.", key_a: "T6", key_b: "T4" },
-                    { a: "Enerjimi daha çok dış dünyadaki hedeflere ve başarılara odaklarım.", b: "Enerjimi daha çok iç dünyamdaki düşüncelere ve analizlere odaklarım.", key_a: "T3", key_b: "T5" },
+                    { a: "Enerjimi daha çok dış dünyadaki hedeflere ve başarılara odaklarrım.", b: "Enerjimi daha çok iç dünyamdaki düşüncelere ve analizlere odaklarrım.", key_a: "T3", key_b: "T5" },
                     { a: "Güçlü sezgilerim ve duygularım bana yön verir.", b: "Net veriler ve analizlerim bana yön verir.", key_a: "T4", key_b: "T6" },
-                    { a: "Sosyal ortamlardaki hiyerarşiyi ve 'kimin güçlü olduğunu' hızla fark ederim.", b: "Sosyal ortamlardaki hiyerarşiyi pek umursamam, herkesin eşit olduğuna inanırım.", key_a: "T3", key_b: "T9" },
-                    { a: "Yaptığım iyiliklerin ve katkıların 'fark edilmesini' isterim.", b: "Katkılarım fark edilmese de 'doğru' olanı yapmış olmanın tatminini yaşarım.", key_a: "T2", key_b: "T1" },
+                    { a: "Sosyal ortamlardaki hiyerarşiyi ve kimin güçlü olduğunu hızla fark ederim.", b: "Sosyal ortamlardaki hiyerarşiyi pek umursamam, herkesin eşit olduğuna inanırım.", key_a: "T3", key_b: "T9" },
+                    { a: "Yaptığım iyiliklerin ve katkıların fark edilmesini isterim.", b: "Katkılarım fark edilmese de doğru olanı yapmış olmanın tatminini yaşarım.", key_a: "T2", key_b: "T1" },
                     { a: "Fiziksel temas ve dokunsallık benim için rahatlatıcı ve önemlidir.", b: "Duygusal ve zihinsel yakınlığı, fiziksel temastan daha öncelikli bulurum.", key_a: "T8", key_b: "T4" },
-                    { a: "Kalabalıkta bile kendimi 'farklı' ve 'yalnız' hissedebilirim.", b: "Kalabalıkta ve sosyal ortamlarda kendimi 'canlı' ve 'ait' hissederim.", key_a: "T4", key_b: "T7" },
+                    { a: "Kalabalıkta bile kendimi farklı ve yalnız hissedebilirim.", b: "Kalabalıkta ve sosyal ortamlarda kendimi canlı ve ait hissederim.", key_a: "T4", key_b: "T7" },
                     { a: "Duygularımı yoğun ve dramatik bir şekilde yaşama eğilimindeyim.", b: "Duygularımı sakin ve kendi içimde yaşama eğilimindeyim.", key_a: "T4", key_b: "T9" },
-                    { a: "Net kurallar ve düzen bana 'güven' verir.", b: "Kuralların olmaması ve esneklik bana 'ilham' verir.", key_a: "T1", key_b: "T7" },
+                    { a: "Net kurallar ve düzen bana güven verir.", b: "Kuralların olmaması ve esneklik bana ilham verir.", key_a: "T1", key_b: "T7" },
                     { a: "İnsanlarla hızlı ve kolay bir şekilde duygusal bağ kurarım.", b: "Derin bir duygusal bağ kurmam için zamana ve gözleme ihtiyaç duyarım.", key_a: "T2", key_b: "T5" },
                     { a: "Hedeflerimi ve başarılarımı başkalarıyla paylaşmayı severim.", b: "Hedeflerimi ve projelerimi genelde kendime saklarım, bitince paylaşırım.", key_a: "T3", key_b: "T5" },
                     { a: "Zorlandığımda başkalarından destek ve yardım istemek bana iyi gelir.", b: "Zorlandığımda tek başıma mücadele etmeyi ve sorunu kendim çözmeyi tercih ederim.", key_a: "T2", key_b: "T8" },
                     { a: "Başkalarının onayı ve takdiri hoşuma gider.", b: "Başkalarının onayı olmasa da kendi kararlarımdan eminimdir.", key_a: "T3", key_b: "T8" },
                     { a: "Detaylı bir plana sahip olmak bana güven verir.", b: "Seçeneklerimin açık olması ve akışta kalmak bana huzur verir.", key_a: "T6", key_b: "T9" },
-                    { a: "Hayattaki anlamı 'başkalarıyla bağ kurmakta' bulurum.", b: "Hayattaki anlamı 'kendimi ve dünyayı keşfetmekte' bulurum.", key_a: "T2", key_b: "T4" }
+                    { a: "Hayattaki anlamı başkalarıyla bağ kurmakta bulurum.", b: "Hayattaki anlamı kendimi ve dünyayı keşfetmekte bulurum.", key_a: "T2", key_b: "T4" }
                 ]
             },
             {
@@ -402,19 +441,19 @@
                     { a: "Bir arkadaşım bana kırıldı: Aramızdaki bağı onarmak için hemen gönlünü almaya çalışırım.", b: "Bir arkadaşım bana kırıldı: Düşünmesi için ona alan tanır, kendi içime çekilirim.", key_a: "T2", key_b: "T5" },
                     { a: "Önemli bir satış şansı var: Sunumu ben yapar, karizmamla ikna etmeye odaklanırım.", b: "Önemli bir satış şansı var: Arka planda kalarak sunum için en iyi verileri ve stratejiyi hazırlarım.", key_a: "T3", key_b: "T6" },
                     { a: "Bir haksızlık gördüm: Güçlü bir şekilde duruma direkt müdahale ederim.", b: "Bir haksızlık gördüm: Doğru prosedürün işlemesi için yetkili mercilere durumu bildiririm.", key_a: "T8", key_b: "T1" },
-                    { a: "Önümde belirsiz bir proje var: Tüm belirsizlikleri netleştirmek için derinlemesine araştırma yaparım.", b: "Önümde belirsiz bir proje var: 'Deneyip görelim' der, yolda öğrenmeyi tercih ederim.", key_a: "T5", key_b: "T7" },
+                    { a: "Önümde belirsiz bir proje var: Tüm belirsizlikleri netleştirmek için derinlemesine araştırma yaparım.", b: "Önümde belirsiz bir proje var: Deneyip görelim der, yolda öğrenmeyi tercih ederim.", key_a: "T5", key_b: "T7" },
                     { a: "İlişkimde bir sorun var: Sorunu net ve doğrudan konuşurum, yüzleşmekten çekinmem.", b: "İlişkimde bir sorun var: Duygularımı dolaylı yoldan (mektup, jestler) anlatmayı tercih ederim.", key_a: "T8", key_b: "T4" },
                     { a: "Aklıma yeni bir fikir geldi: Heyecanla hemen başlatırım ve enerjisiyle hareket ederim.", b: "Aklıma yeni bir fikir geldi: Fikri olgunlaştırmak için zaman ayırır, derinlemesine çalışırım.", key_a: "T7", key_b: "T5" },
                     { a: "Bir çatışma çıktı: Duruma hakim olur, kontrolü ele alır ve yönlendiririm.", b: "Bir çatışma çıktı: Taraflar arasında arabuluculuk yapar, ortak bir zemin bulmaya çalışırım.", key_a: "T8", key_b: "T9" },
-                    { a: "Çok az zamanım kaldı: Hemen öncelik listesi yapar ve disiplinle çalışırım.", b: "Çok az zamanım kaldı: Önce ilham gelmesini veya duygusal olarak 'hazır' hissetmeyi beklerim.", key_a: "T1", key_b: "T4" },
+                    { a: "Çok az zamanım kaldı: Hemen öncelik listesi yapar ve disiplinle çalışırım.", b: "Çok az zamanım kaldı: Önce ilham gelmesini veya duygusal olarak hazır hissetmeyi beklerim.", key_a: "T1", key_b: "T4" },
                     { a: "Eleştiri aldım: İmajımı düzeltmek için performansımı hemen artırırım.", b: "Eleştiri aldım: Kimliğime bir saldırı olarak algılar, duygusal olarak savunmaya geçerim.", key_a: "T3", key_b: "T4" },
                     { a: "Projede kaynak kıt: Kendi kaynaklarımla, tasarruflu bir şekilde tek başıma çalışırım.", b: "Projede kaynak kıt: Eksikleri tamamlamak için başkalarından destek ister ve işbirliği yaparım.", key_a: "T5", key_b: "T2" },
                     { a: "Büyük risk, büyük ödül: Genellikle büyük riski almayı tercih ederim.", b: "Büyük risk, büyük ödül: Genellikle güvenli ve kademeli adımları tercih ederim.", key_a: "T8", key_b: "T6" },
                     { a: "Yön belirsiz ve otorite zayıf: Otoriteyi sorgular ve en kötü senaryoya hazırlanırım.", b: "Yön belirsiz ve otorite zayıf: Durumu kabullenir, akışa uyar ve uyumu korurum.", key_a: "T6", key_b: "T9" },
                     { a: "Kendi hedefimle takım hedefi çakıştı: Kendi hedefimi ve başarımı öncelerim.", b: "Kendi hedefimle takım hedefi çakıştı: Takımın ihtiyacını ve başarısını öncelerim.", key_a: "T3", key_b: "T2" },
                     { a: "İlhamım yok: Keyifli ve eğlenceli aktivitelerle enerjimi yenilerim.", b: "İlhamım yok: Disiplinli bir şekilde rutine girer ve ilham gelmese de üretmeye çalışırım.", key_a: "T7", key_b: "T1" },
-                    { a: "Yeni bir çevreye girdim: Hızla yeni insanlarla tanışır ve bir ağ kurarım.", b: "Yeni bir çevreye girdim: Sadece az sayıda ve 'benim gibi' olan insanlarla derin bağ kurarım.", key_a: "T3", key_b: "T4" },
-                    { a: "Ekibimden biri hata yaptı: Standartları ve süreçleri netleştirir, 'doğru' yolu gösteririm.", b: "Ekibimden biri hata yaptı: Onu anladığımı hissettirir, duygusal olarak destek (koçluk) veririm.", key_a: "T1", key_b: "T2" },
+                    { a: "Yeni bir çevreye girdim: Hızla yeni insanlarla tanışır ve bir ağ kurarım.", b: "Yeni bir çevreye girdim: Sadece az sayıda ve benim gibi olan insanlarla derin bağ kurarım.", key_a: "T3", key_b: "T4" },
+                    { a: "Ekibimden biri hata yaptı: Standartları ve süreçleri netleştirir, doğru yolu gösteririm.", b: "Ekibimden biri hata yaptı: Onu anladığımı hissettirir, duygusal olarak destek (koçluk) veririm.", key_a: "T1", key_b: "T2" },
                     { a: "Aşırı yük altındayım: Görevleri delege eder ve kontrolü elden bırakmam.", b: "Aşırı yük altındayım: Kendi alanıma çekilir, tek başıma ve odaklanarak halletmeye çalışırım.", key_a: "T8", key_b: "T5" }
                 ]
             }
@@ -489,7 +528,7 @@
             T6: {
                 name: "Tip 6 – Sadık Sorgulayıcı (Loyalist)",
                 desc: "Güvenlik, planlama ve sadakat önemlidir.",
-                detailedDesc: "Tip 6, 'Sadık Sorgulayıcı' olarak bilinir. Temel motivasyonu, güvenlik ve destek bulmaktır. Dünyayı belirsiz ve potansiyel olarak tehlikeli bir yer olarak algılarlar. Bu nedenle, en kötü senaryoları düşünür, planlar yapar ve güvenebilecekleri bir otorite, sistem veya inanç ararlar. Son derece sadık, sorumlu ve çalışkandırlar. Ancak aynı zamanda kaygı, şüphe ve kararsızlık yaşamaya da çok yatkındırlar. İki alt türü vardır: 'Fobik' 6 (tehlikeden kaçan) ve 'Kontra-fobik' 6 (tehlikenin üstüne giden). Temel Korkusu: Güvende olmamak, desteksiz kalmak veya ihanete uğramaktır. Temel Arzusu: Güvenlik, istikrar ve güvende hissetmektir.",
+                detailedDesc: "Tip 6, 'Sadık Sorgulayıcı' olarak bilinir. Temel motivasyonu, güvenlik ve destek bulmaktır. Dünyayı belirsiz ve potensiyel olarak tehlikeli bir yer olarak algılarlar. Bu nedenle, en kötü senaryoları düşünür, planlar yapar ve güvenebilecekleri bir otorite, sistem veya inanç ararlar. Son derece sadık, sorumlu ve çalışkandırlar. Ancak aynı zamanda kaygı, şüphe ve kararsızlık yaşamaya da çok yatkındırlar. İki alt türü vardır: 'Fobik' 6 (tehlikeden kaçan) ve 'Kontra-fobik' 6 (tehlikenin üstüne giden). Temel Korkusu: Güvende olmamak, desteksiz kalmak veya ihanete uğramaktır. Temel Arzusu: Güvenlik, istikrar ve güvende hissetmektir.",
                 famousExamples: ["Tom Hanks", "Prens Harry", "Ellen DeGeneres", "Sigmund Freud"],
                 wings: {
                     w5: "<strong>6w5 ('Savunmacı'):</strong> Bu kanat, Tip 6'nın güvenlik arayışını Tip 5'in entelektüel ve içe dönük doğasıyla birleştirir. 6w5'ler, 6w7'lere göre daha ciddi, daha analitik ve daha az sosyaldirler. Güvenliği, 'bilgi' ve 'sistemler' üzerinden ararlar. Dünyayı anlamak için ideolojilere veya teknik bilgilere güvenirler. Otoriteyi daha fazla sorgularlar ve daha mesafeli dururlar.",
@@ -537,7 +576,7 @@
         };
 
         // ========================================================================
-        // YENİ: ÜÇLÜ TİP (TRITYPE) İSİM VERİTABANI
+        // ÜÇLÜ TİP (TRITYPE) İSİM VERİTABANI
         // ========================================================================
         const tritypeNames = {
             "125": "Akıl Hocası", "126": "Yardımcı", "127": "Öğretmen",
@@ -554,14 +593,15 @@
         // Kod, bunu hesaplayacak şekilde yazılmıştır.
 
         // ========================================================================
-        // YENİ: TEST MANTIĞI (LOGIC) - "MÜKEMMEL ANALİZ" İÇİN GÜNCELLENDİ
+        // TEST MANTIĞI (LOGIC) - "MÜKEMMEL ANALİZ" VE "KAYDET BUTONU" İÇİN GÜNCELLENDİ
         // ========================================================================
         
         // --- Durum Değişkenleri ---
         let currentSectionIndex = 0, currentQuestionIndex = 0, totalQuestions = 0, answeredQuestions = 0;
         let scores = { T1: 0, T2: 0, T3: 0, T4: 0, T5: 0, T6: 0, T7: 0, T8: 0, T9: 0 };
         let answerHistory = [], backButtonCount = 0, isEliminated = false;
-        let userName = "Anonim"; // Kullanıcı adını saklamak için
+        let userName = "Anonim";
+        let finalResultsData = {}; // YENİ: Sonuçları ve veriyi geçici olarak tut
 
         // --- DOM Elementleri ---
         const introContainer = document.getElementById('intro-container');
@@ -572,6 +612,10 @@
         const progressBar = document.getElementById('progress-bar'), progressText = document.getElementById('progress-text');
         const resultsTableBody = document.getElementById('results-table-body').getElementsByTagName('tbody')[0], btnBack = document.getElementById('btn-back');
         
+        // YENİ FİNAL EKRANI ELEMENTLERİ
+        const finaleContainer = document.getElementById('finale-container');
+        const showAndSaveButton = document.getElementById('show-and-save-button');
+        
         // --- Testi Başlatma Fonksiyonu ---
         startButton.addEventListener('click', function() {
             userName = nameInput.value.trim();
@@ -581,13 +625,21 @@
             initializeTest();
         });
 
-        // --- Diğer Fonksiyonlar (handleBack, handleAnswer vb. - DEĞİŞİKLİK YOK) ---
+        // --- Diğer Fonksiyonlar (handleBack, handleAnswer vb.) ---
         function initializeTest() {
             totalQuestions = questions.reduce((acc, section) => acc + section.items.length, 0);
             loadQuestion(); updateProgress();
         }
         function loadQuestion() {
-            if (isEliminated) return; if (currentSectionIndex >= questions.length) { showResults(); return; }
+            if (isEliminated) return;
+            // YENİ: Soru yüklemeden önce final ekranını gizle (geri basılırsa diye)
+            finaleContainer.style.display = 'none'; 
+            testContainer.style.display = 'block';
+
+            if (currentSectionIndex >= questions.length) { 
+                showFinaleScreen(); 
+                return; 
+            }
             const section = questions[currentSectionIndex]; const question = section.items[currentQuestionIndex];
             sectionTitle.textContent = section.section; btnA.innerHTML = `<span>A)</span> ${question.a}`; btnB.innerHTML = `<span>B)</span> ${question.b}`;
             btnBack.disabled = answerHistory.length === 0;
@@ -616,51 +668,41 @@
             answerHistory.push({ scoreKey: scoreKey, sectionIndex: currentSectionIndex, questionIndex: currentQuestionIndex });
             answeredQuestions++; currentQuestionIndex++;
             if (currentQuestionIndex >= section.items.length) { currentSectionIndex++; currentQuestionIndex = 0; }
-            if (currentSectionIndex >= questions.length) { updateProgress(); showResults(); } else { loadQuestion(); updateProgress(); }
-        }
-
-        // ========================================================================
-        // YENİ: "MÜKEMMEL ANALİZ" SONUÇ FONKSİYONU
-        // ========================================================================
-
-        // Yardımcı fonksiyon: Bir merkezdeki en yüksek puanlı tipi bulur
-        function findCenterLeader(scores, centerTypes) {
-            let leaderType = centerTypes[0]; // ör: "T8"
-            let maxScore = scores[leaderType]; // ör: scores["T8"]
-
-            centerTypes.slice(1).forEach(type => {
-                if (scores[type] > maxScore) {
-                    maxScore = scores[type];
-                    leaderType = type;
-                }
-            });
-            return leaderType; // ör: "T1" (eğer T1 > T8 ve T9 ise)
-        }
-
-        // Yardımcı fonksiyon: Tritype ismini bulur (permütasyonları önemsemeden)
-        function getTritypeName(tritypeString) { // "8-3-7"
-            const types = tritypeString.split('-').map(Number).sort((a, b) => a - b); // [3, 7, 8]
-            const key = types.join(''); // "378"
             
-            // Tüm permütasyonları kontrol et (veritabanı küçük olduğu için bu daha güvenli)
-            const perms = [
-                `${types[0]}${types[1]}${types[2]}`, `${types[0]}${types[2]}${types[1]}`,
-                `${types[1]}${types[0]}${types[2]}`, `${types[1]}${types[2]}${types[0]}`,
-                `${types[2]}${types[0]}${types[1]}`, `${types[2]}${types[1]}${types[0]}`
-            ];
-            
-            for (const p of perms) {
-                if (tritypeNames[p]) {
-                    return tritypeNames[p];
-                }
+            // YENİ AKIŞ: Test bittiyse showResults() ÇAĞIRMA, final ekranını göster.
+            if (currentSectionIndex >= questions.length) { 
+                updateProgress(); 
+                showFinaleScreen(); // showResults() yerine
+            } else { 
+                loadQuestion(); updateProgress(); 
             }
-            return "Eşsiz Kombinasyon"; // Eşleşme bulunamazsa
         }
 
-        async function showResults() {
-            testContainer.style.display = 'none';
-            resultsContainer.style.display = 'block';
+        // ========================================================================
+        // YENİ AKIŞ FONKSİYONLARI
+        // ========================================================================
 
+        // YENİ: FİNAL EKRANINI GÖSTER
+        function showFinaleScreen() {
+            testContainer.style.display = 'none';
+            finaleContainer.style.display = 'block';
+        }
+
+        // YENİ: KAYDET BUTONU TETİKLEYİCİSİ
+        showAndSaveButton.addEventListener('click', async function() {
+            // 1. Butona basıldığında geri bildirim ver
+            showAndSaveButton.disabled = true;
+            showAndSaveButton.textContent = "Hesaplanıyor..."; 
+            
+            // 2. Tüm analizleri yap VE veriyi gönder
+            await analyzeAndSaveData();
+            
+            // 3. Sonuçları ekrana bas
+            displayResults();
+        });
+
+        // YENİ: "MÜKEMMEL ANALİZ" HESAPLAMA VE KAYDETME MOTORU
+        async function analyzeAndSaveData() {
             // 1. Puanları Yüzdelere Çevir ve Sırala
             let results = [];
             const totalScore = totalQuestions; 
@@ -676,10 +718,10 @@
             results.sort((a, b) => b.percentage - a.percentage);
 
             // 2. Ana Tip, Kanat ve Stres/Rahat Bilgilerini Hesapla
-            const anaTipResult = results[0]; // En yüksek puanlı
-            const anaTipKey = anaTipResult.type; // ör: "T3"
+            const anaTipResult = results[0];
+            const anaTipKey = anaTipResult.type;
             const anaTipData = typeInfo[anaTipKey];
-            const anaTipNum = parseInt(anaTipKey.slice(1)); // ör: 3
+            const anaTipNum = parseInt(anaTipKey.slice(1));
 
             // Kanat Hesaplama
             const wing1Num = (anaTipNum === 1) ? 9 : anaTipNum - 1;
@@ -699,14 +741,11 @@
                 wingDesc = `Skorların, ana tipinin her iki komşu kanadına (Tip ${wing1Num} ve Tip ${wing2Num}) da eşit derecede yakın olduğunu gösteriyor. Bu, 'dengeli bir kanat' olarak adlandırılır. Her iki kanadın da özelliklerini duruma göre sergileyebilirsin.`;
             }
 
-            // 3. YENİ: Üçlü Tip (Tritype) ve Merkez Sıralaması Hesaplama
-            
-            // Merkez Liderlerini Bul
-            const gutLeaderType = findCenterLeader(scores, ["T8", "T9", "T1"]); // ör: "T8"
-            const heartLeaderType = findCenterLeader(scores, ["T2", "T3", "T4"]); // ör: "T3"
-            const headLeaderType = findCenterLeader(scores, ["T5", "T6", "T7"]); // ör: "T7"
+            // 3. Üçlü Tip (Tritype) ve Merkez Sıralaması Hesaplama
+            const gutLeaderType = findCenterLeader(scores, ["T8", "T9", "T1"]);
+            const heartLeaderType = findCenterLeader(scores, ["T2", "T3", "T4"]);
+            const headLeaderType = findCenterLeader(scores, ["T5", "T6", "T7"]);
 
-            // Ana Tipi başa alarak Tritype sırasını oluştur (örn: 8-3-7)
             let tritypeOrder = [];
             const anaTipCenter = (["T8", "T9", "T1"].includes(anaTipKey)) ? 'gut' :
                                 (["T2", "T3", "T4"].includes(anaTipKey)) ? 'heart' : 'head';
@@ -715,34 +754,30 @@
                 tritypeOrder = [gutLeaderType, heartLeaderType, headLeaderType];
             } else if (anaTipCenter === 'heart') {
                 tritypeOrder = [heartLeaderType, headLeaderType, gutLeaderType];
-            } else { // anaTipCenter === 'head'
+            } else {
                 tritypeOrder = [headLeaderType, gutLeaderType, heartLeaderType];
             }
             
-            const tritypeString = tritypeOrder.map(t => t.slice(1)).join('-'); // "8-3-7"
-            const tritypeName = getTritypeName(tritypeString); // "Harekete Geçirici"
+            const tritypeString = tritypeOrder.map(t => t.slice(1)).join('-');
+            const tritypeName = getTritypeName(tritypeString);
 
-            // Merkezlerin Toplam Puanlarını Hesapla
             const gutScore = scores.T8 + scores.T9 + scores.T1;
             const heartScore = scores.T2 + scores.T3 + scores.T4;
             const headScore = scores.T5 + scores.T6 + scores.T7;
-
             const centers = [
                 { name: "İçgüdü (Eylem)", score: gutScore },
                 { name: "Kalp (Duygu/İmaj)", score: heartScore },
                 { name: "Zihin (Analiz/Korku)", score: headScore }
             ];
-            centers.sort((a, b) => b.score - a.score); // Puanlara göre sırala
-            
+            centers.sort((a, b) => b.score - a.score);
             const baskinMerkez = centers[0].name;
             const baskilanmisMerkez = centers[2].name;
 
-            // 4. YENİ: Veri gönderme işlemi
+            // 4. Veri gönderme işlemi
             // ==================================================================
-            // !!! KRAL, SENİN URL'N BURAYA EKLENDİ !!!
-            // Hiçbir şeyi değiştirme, tam istediğin gibi.
+            // !!! KRAL, SENİN URL'N BURAYA EKLENDİ VE DOĞRU !!!
             // ==================================================================
-            const SIZIN_GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzhOeoSh_B_gNFmp_ZMJD-EnOWYwElKYccUw1x6Tz4Mz5AaKQw9HQJNbzYODc3zFwWnqg/exec";
+            const SIZIN_GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyEPt5V5TpFt66rGL2wK-kwWn8jL1lYhsUJpvsEjXCFJ8h9diduxZirJcrJipJNqlvj/exec";
             // ==================================================================
 
             const dataToSave = {
@@ -750,17 +785,17 @@
                 Tarih: new Date().toLocaleString("tr-TR"),
                 AnaTip: anaTipData.name,
                 Kanat: wingTitle,
-                Tritype: tritypeString, // YENİ: ör: "8-3-7"
-                TritypeIsmi: tritypeName, // YENİ: ör: "Harekete Geçirici"
-                BaskinMerkez: baskinMerkez, // YENİ: ör: "İçgüdü (Eylem)"
-                BaskilanmisMerkez: baskilanmisMerkez, // YENİ: ör: "Kalp (Duygu/İmaj)"
+                Tritype: tritypeString,
+                TritypeIsmi: tritypeName,
+                BaskinMerkez: baskinMerkez,
+                BaskilanmisMerkez: baskilanmisMerkez,
                 AnaTipYuzde: anaTipResult.percentage + "%",
                 T1: scores.T1, T2: scores.T2, T3: scores.T3,
                 T4: scores.T4, T5: scores.T5, T6: scores.T6,
                 T7: scores.T7, T8: scores.T8, T9: scores.T9
             };
 
-            // Veriyi arka planda Google Sheet'e gönder
+            // 5. Veriyi kaydet VE tüm sonuçları global değişkene ata
             try {
                 await fetch(SIZIN_GOOGLE_SCRIPT_URL, {
                     method: "POST",
@@ -768,12 +803,35 @@
                     headers: { "Content-Type": "application/json", },
                     body: JSON.stringify(dataToSave),
                 });
+                console.log("Veri başarıyla Google E-Tablosuna kaydedildi.");
+                showAndSaveButton.textContent = "Başarıyla Kaydedildi!"; // Kullanıcıya geri bildirim
             } catch (error) {
-                console.log("Veri gönderme isteği yapıldı. (Olası CORS hatası normaldir)");
+                console.log("Veri gönderme isteği yapıldı. (Olası CORS hatası normaldir, veri yine de gitmiş olabilir)");
+                // Hata olsa bile, kullanıcıya sonuçları göstermeye devam et
+                showAndSaveButton.textContent = "Sonuçlar Hazır (Kaydedilemedi)"; // Hata durumunda bile devam et
             }
-
-            // 5. Sonuçları Ekrana Bas
             
+            // 6. Sonuçları global bir değişkene atayalım ki displayResults() kullansın
+            finalResultsData = {
+                results, anaTipData, wingTitle, wingDesc, 
+                tritypeString, tritypeName, gutLeaderType, heartLeaderType, headLeaderType,
+                baskinMerkez, baskilanmisMerkez, centers
+            };
+        }
+
+        // YENİ: Sadece sonuçları ekrana basan fonksiyon
+        function displayResults() {
+            // Global değişkenden verileri al
+            const {
+                results, anaTipData, wingTitle, wingDesc, 
+                tritypeString, tritypeName, gutLeaderType, heartLeaderType, headLeaderType,
+                baskinMerkez, baskilanmisMerkez, centers
+            } = finalResultsData;
+
+            // Final ekranını gizle ve sonuçları göster
+            finaleContainer.style.display = 'none';
+            resultsContainer.style.display = 'block';
+
             // Ana Tip
             document.getElementById('ana-tip-title').textContent = `Ana Tipin: ${anaTipData.name}`;
             document.getElementById('ana-tip-desc').textContent = anaTipData.detailedDesc;
@@ -785,7 +843,7 @@
                 celebsList.appendChild(li);
             });
 
-            // YENİ: Üçlü Tip (Tritype)
+            // Üçlü Tip (Tritype)
             document.getElementById('tritype-desc').innerHTML = `Sizin tam portreniz, "Üçlü Tip" (Tritype) analizi ile ortaya çıkar. Ana tipiniz (${anaTipData.name}), <strong>${tritypeString} (${tritypeName})</strong> olarak bilinen daha büyük bir arketipin parçasıdır.
             <br><br>
             Bunun anlamı:
@@ -807,7 +865,7 @@
             
             // Stres/Rahat
             document.getElementById('stres-desc').innerHTML = anaTipData.stressDesc;
-            document.getElementById('rahat-desc').innerHTML = anaTipData.comfortDesc;
+            document.getElementById('rahat-desc').innerHTML = anaTopData.comfortDesc;
 
             // Puan Tablosu
             resultsTableBody.innerHTML = "";
@@ -815,6 +873,32 @@
                 const row = resultsTableBody.insertRow();
                 row.innerHTML = `<td>${result.name}</td><td>${result.desc}</td><td>${result.percentage}%</td>`;
             });
+        }
+        
+        // Yardımcı fonksiyonlar
+        function findCenterLeader(scores, centerTypes) {
+            let leaderType = centerTypes[0];
+            let maxScore = scores[leaderType];
+            centerTypes.slice(1).forEach(type => {
+                if (scores[type] > maxScore) {
+                    maxScore = scores[type];
+                    leaderType = type;
+                }
+            });
+            return leaderType;
+        }
+
+        function getTritypeName(tritypeString) {
+            const types = tritypeString.split('-').map(Number).sort((a, b) => a - b);
+            const perms = [
+                `${types[0]}${types[1]}${types[2]}`, `${types[0]}${types[2]}${types[1]}`,
+                `${types[1]}${types[0]}${types[2]}`, `${types[1]}${types[2]}${types[0]}`,
+                `${types[2]}${types[0]}${types[1]}`, `${types[2]}${types[1]}${types[0]}`
+            ];
+            for (const p of perms) {
+                if (tritypeNames[p]) { return tritypeNames[p]; }
+            }
+            return "Eşsiz Kombinasyon";
         }
         
     </script>
