@@ -568,7 +568,7 @@
                 famousExamples: ["Keanu Reeves", "Dalai Lama", "Barack Obama", "Audrey Hepburn", "Snoop Dogg"],
                 wings: {
                     w8: "<strong>9w8 ('Hakem'):</strong> Bu kanat, Tip 9'un barışçıl doğasını Tip 8'in güçlü ve iddialı enerjisiyle birleştirir. 9w8'ler, 9w1'lere göre daha dışa dönük, daha kararlı ve daha 'sağlam' duruşludurlar. Huzuru severler ama 'rahat bırakılmak' için savaşabilirler. Daha topraklanmış ve pratiktirler. Öfkelerini 9w1'lere göre daha net (ama yine de gecikmeli) gösterebilirler. Daha iddialı ve inatçı olabilirler.",
-                    w1: "<strong>9w1 ('Hayalperest' / 'Arabulucu'):</strong> Bu kanat, Tip 9'un uyum arayışını Tip 1'in prensipli ve idealist doğasıyla birleştirir. 9w1'ler, 9w8'lere göre daha içe dönük, daha düzenli ve daha 'idealist' bir barış arayışındadırlar. Sadece 'huzur' değil, 'doğru' olan huzuru ararlar. Daha disiplinli ve sorumlu davranırlar. Çatışmadan kaçınırlar çünkü çatışma 'doğru' değildir. Öfkelerini daha çok bastırır ve ahlaki bir üstünlük olarak sunabilirler."
+                    w1: "<strong>9w1 ('Hayalperest' / 'Arabulucu'):</strong> Bu kanat, Tip 9'un uyum arayışını Tip 1'in prensipli ve idealist doğasıyla birleştirir. 9w1'ler, 9w8'lere göre çok daha içe dönük, daha düzenli ve daha 'idealist' bir barış arayışındadırlar. Sadece 'huzur' değil, 'doğru' olan huzuru ararlar. Daha disiplinli ve sorumlu davranırlar. Çatışmadan kaçınırlar çünkü çatışma 'doğru' değildir. Öfkelerini daha çok bastırır ve ahlaki bir üstünlük olarak sunabilirler."
                 },
                 stressDesc: "<strong>Stres Altında (Tip 6'ya gider):</strong> Tip 9, normalde sakin ve uyumluyken, huzuru bozulduğunda veya baskı altında kaldığında Tip 6'nın sağlıksız yönlerine kayar. Bu durumda, o sakin tavır gider, yerine kaygı, endişe ve en kötü senaryoyu düşünme hali gelir. Herkesten ve her şeyden şüphe duymaya başlarlar. Güvenliklerini kaybetme korkusu yaşar, pasif-agresif ve reaktif hale gelirler.",
                 comfortDesc: "<strong>Rahatladığında (Tip 3'e gider):</strong> Tip 9, kendini güvende, huzurlu ve 'görülmüş' hissettiğinde, pasif atalet halinden çıkıp Tip 3'ün sağlıklı yönlerine gider. Bu, onların kendi değerlerini fark etmelerini ve eyleme geçmelerini sağlar. 'Benim isteklerim de önemli' derler ve hedefler belirleyip bu hedefler için çalışmaya başlarlar. Uyumlu olmaktan, 'etkili' olmaya doğru bir geçiş yaparlar. Enerjileri artar ve daha üretken olurlar."
@@ -694,7 +694,7 @@
             showAndSaveButton.disabled = true;
             showAndSaveButton.textContent = "Hesaplanıyor..."; 
             
-            // 2. Tüm analizleri yap VE veriyi gönder
+            // 2. Tüm analizleri yap VE veriyi gönder (Global değişkene kaydet)
             await analyzeAndSaveData();
             
             // 3. Sonuçları ekrana bas
@@ -775,7 +775,7 @@
 
             // 4. Veri gönderme işlemi
             // ==================================================================
-            // !!! KRAL, SENİN URL'N BURAYA EKLENDİ VE DOĞRU !!!
+            // !!! KRAL, BURAYA DİKKAT! KONSOL TESTİNDE ÇALIŞAN URL'Yİ BURAYA KOY !!!
             // ==================================================================
             const SIZIN_GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyEPt5V5TpFt66rGL2wK-kwWn8jL1lYhsUJpvsEjXCFJ8h9diduxZirJcrJipJNqlvj/exec";
             // ==================================================================
@@ -807,7 +807,6 @@
                 showAndSaveButton.textContent = "Başarıyla Kaydedildi!"; // Kullanıcıya geri bildirim
             } catch (error) {
                 console.log("Veri gönderme isteği yapıldı. (Olası CORS hatası normaldir, veri yine de gitmiş olabilir)");
-                // Hata olsa bile, kullanıcıya sonuçları göstermeye devam et
                 showAndSaveButton.textContent = "Sonuçlar Hazır (Kaydedilemedi)"; // Hata durumunda bile devam et
             }
             
@@ -865,9 +864,11 @@
             
             // Stres/Rahat
             document.getElementById('stres-desc').innerHTML = anaTipData.stressDesc;
-            document.getElementById('rahat-desc').innerHTML = anaTopData.comfortDesc;
+            
+            // !!!!! HATA DÜZELTİLDİ: anaTopData -> anaTipData !!!!!!
+            document.getElementById('rahat-desc').innerHTML = anaTipData.comfortDesc;
 
-            // Puan Tablosu
+            // Puan Tablosu (Artık çalışacak)
             resultsTableBody.innerHTML = "";
             results.forEach(result => {
                 const row = resultsTableBody.insertRow();
