@@ -1,0 +1,13 @@
+{
+  "name": "ennegram",
+  "version": "2.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Ücretsiz, tarayıcıda çalışan Enneagram öz değerlendirmesi",
+  "engines": { "node": ">=22" },
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "test": "node --test tests/*.test.js",
+    "dev": "node scripts/serve.mjs"
+  }
+}
